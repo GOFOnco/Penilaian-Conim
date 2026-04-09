@@ -1,496 +1,759 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Form Penilaian Konvensi Inovasi Dankos 2025</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORM PENILAIAN PDCARP - DIGITAL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Poppins', sans-serif;
+        }
 
-    body {
-      background: #e9f0f5;
-      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-      margin: 0;
-      padding: 24px 20px;
-    }
+        body {
+            background: #f1f5f9;
+            padding: 20px;
+        }
 
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      background: white;
-      border-radius: 28px;
-      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15);
-      overflow: hidden;
-      padding: 20px 24px 32px 24px;
-    }
+        .navbar {
+            background: white;
+            border-radius: 2rem;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
 
-    h1 {
-      font-size: 1.8rem;
-      margin: 0 0 6px 0;
-      color: #0a2b3e;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: space-between;
-    }
+        .nav-btn {
+            background: transparent;
+            border: none;
+            padding: 0.6rem 1.8rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #334155;
+        }
 
-    h1 small {
-      font-size: 0.8rem;
-      font-weight: normal;
-      background: #d9eaf5;
-      padding: 6px 14px;
-      border-radius: 40px;
-      color: #005a8c;
-    }
+        .nav-btn.active {
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 4px 8px rgba(59,130,246,0.3);
+        }
 
-    .sub {
-      color: #2c6979;
-      border-left: 4px solid #2c9faf;
-      padding-left: 16px;
-      margin: 8px 0 24px 0;
-      font-weight: 500;
-    }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
 
-    /* header informasi peserta */
-    .info-card {
-      background: #f8fafc;
-      border-radius: 24px;
-      padding: 16px 24px;
-      margin-bottom: 28px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 24px;
-      border: 1px solid #cbdde6;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-    }
+        .panel {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.8rem 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            display: none;
+        }
 
-    .info-field {
-      flex: 1;
-      min-width: 180px;
-    }
+        .panel.active-panel {
+            display: block;
+        }
 
-    .info-field label {
-      font-weight: 700;
-      display: block;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #2c6979;
-      margin-bottom: 6px;
-    }
+        h2, h3 {
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            color: #0f172a;
+            border-left: 6px solid #3b82f6;
+            padding-left: 1rem;
+        }
 
-    .info-field input, .info-field select {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 16px;
-      border: 1px solid #b9cfdf;
-      background: white;
-      font-weight: 500;
-      font-size: 0.9rem;
-      transition: 0.2s;
-    }
+        h3 {
+            margin: 1rem 0 0.8rem 0;
+            font-size: 1.1rem;
+        }
 
-    .info-field input:focus, .info-field select:focus {
-      outline: none;
-      border-color: #1f8a9c;
-      box-shadow: 0 0 0 3px rgba(31,138,156,0.2);
-    }
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
 
-    /* tabel kriteria */
-    .table-wrapper {
-      overflow-x: auto;
-      margin: 28px 0 24px;
-      border-radius: 20px;
-      border: 1px solid #e2edf2;
-      background: #fff;
-    }
+        label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            color: #1e293b;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.85rem;
-      min-width: 900px;
-    }
+        input, select, textarea {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 1rem;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
 
-    th {
-      background: #eef3f7;
-      color: #1a4b5e;
-      padding: 14px 10px;
-      font-weight: 700;
-      border-bottom: 2px solid #cde0e8;
-      text-align: center;
-    }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
 
-    td {
-      padding: 12px 8px;
-      border-bottom: 1px solid #e0edf2;
-      vertical-align: middle;
-    }
+        button.btn-primary {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: 0.2s;
+            text-transform: uppercase;
+        }
 
-    .criteria-group {
-      background-color: #f9fdfe;
-      font-weight: 700;
-      border-left: 4px solid #2c9faf;
-    }
+        button.btn-primary:hover {
+            background: #2563eb;
+        }
 
-    .criteria-item td:first-child {
-      font-weight: 500;
-      background-color: #ffffff;
-    }
+        button.btn-warning {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
 
-    .score-select {
-      width: 85px;
-      padding: 8px 6px;
-      border-radius: 20px;
-      border: 1px solid #bad2df;
-      background: white;
-      font-weight: 600;
-      text-align: center;
-      font-size: 0.85rem;
-    }
+        button.btn-danger {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
 
-    .bobot-cell {
-      text-align: center;
-      font-weight: 600;
-      background: #f1f7fa;
-    }
+        .card-list {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
 
-    .hasil-cell {
-      text-align: center;
-      font-weight: 700;
-      background: #fef7e0;
-      color: #b1620c;
-    }
+        .card-item {
+            background: #f8fafc;
+            border-radius: 1rem;
+            padding: 1rem;
+            border-left: 4px solid #3b82f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
 
-    .feedback-section {
-      margin-top: 28px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 24px;
-      margin-bottom: 28px;
-    }
+        .kriteria-item {
+            background: #f1f5f9;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 1rem;
+            border: 1px solid #e2e8f0;
+        }
 
-    .feedback-box {
-      flex: 1;
-      background: #fefaf5;
-      border-radius: 24px;
-      padding: 18px 22px;
-      border: 1px solid #f0e2cf;
-    }
+        .kriteria-header {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
 
-    .feedback-box h3 {
-      margin-top: 0;
-      margin-bottom: 12px;
-      font-size: 1.2rem;
-      color: #1f5e6e;
-    }
+        .rubric-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+            font-size: 0.7rem;
+            background: #ffffff;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+        }
 
-    .feedback-box textarea {
-      width: 100%;
-      border-radius: 20px;
-      border: 1px solid #d4c8b5;
-      padding: 12px;
-      font-family: inherit;
-      resize: vertical;
-      background: white;
-    }
+        .rubric-item {
+            padding: 0.3rem;
+            border-right: 1px solid #e2e8f0;
+        }
 
-    .result-area {
-      background: #e6f4f0;
-      border-radius: 32px;
-      padding: 18px 28px;
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-top: 20px;
-    }
+        .rubric-item:last-child {
+            border-right: none;
+        }
 
-    .total-score {
-      font-size: 2rem;
-      font-weight: 800;
-      color: #005f73;
-    }
+        .rubric-score {
+            font-weight: 700;
+            color: #3b82f6;
+            background: #eff6ff;
+            display: inline-block;
+            padding: 0.1rem 0.4rem;
+            border-radius: 0.3rem;
+            margin-bottom: 0.2rem;
+        }
 
-    .total-score span {
-      font-size: 1rem;
-      font-weight: normal;
-    }
+        .rubric-desc {
+            color: #475569;
+            line-height: 1.3;
+        }
 
-    .btn-reset {
-      background: white;
-      border: 1px solid #2c9faf;
-      padding: 10px 24px;
-      border-radius: 40px;
-      font-weight: bold;
-      color: #1f6e7a;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
 
-    .btn-reset:hover {
-      background: #dff2f5;
-    }
+        .alert {
+            background: #dcfce7;
+            color: #166534;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
 
-    .footer-note {
-      font-size: 0.7rem;
-      text-align: center;
-      margin-top: 28px;
-      color: #6f8f9c;
-      border-top: 1px solid #cde0e8;
-      padding-top: 20px;
-    }
+        .alert-error {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
 
-    .score-highlight {
-      background: #fff2df;
-    }
-  </style>
+        .badge {
+            background: #e2e8f0;
+            padding: 0.2rem 0.6rem;
+            border-radius: 1rem;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .nilai-input {
+            width: 120px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .text-uppercase {
+            text-transform: uppercase;
+        }
+
+        button {
+            text-transform: uppercase;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
-  <h1>
-    📋 Form Penilaian Konvensi Inovasi Dankos 2025
-    <small>SS / OSR / QCC / QCP</small>
-  </h1>
-  <div class="sub">Pedoman penilaian mengacu kriteria PLAN-DO-CHECK-ACTION (PDCA) + REPORT & PRESENTATION</div>
+    <div class="navbar">
+        <button class="nav-btn" data-nav="dashboard">📊 DASHBOARD (MENYUSUL)</button>
+        <button class="nav-btn active" data-nav="form">📝 FORM INPUT</button>
+        <button class="nav-btn" data-nav="management">⚙️ MANAGEMENT</button>
+    </div>
 
-  <!-- data peserta & juri -->
-  <div class="info-card">
-    <div class="info-field">
-      <label>🏢 Perusahaan</label>
-      <input type="text" id="company" value="PT. DANKOS FARMA" readonly style="background:#f2f6f9;">
-    </div>
-    <div class="info-field">
-      <label>👥 Nama Peserta / Tim</label>
-      <input type="text" id="peserta" placeholder="Contoh: Zainal Abidin / Tim Inovasi">
-    </div>
-    <div class="info-field">
-      <label>📢 Channel / Judul Conim</label>
-      <input type="text" id="judul" placeholder="SS - Management Filter Bag ...">
-    </div>
-    <div class="info-field">
-      <label>⚖️ Nama Juri</label>
-      <input type="text" id="juri" placeholder="Nama Juri">
-    </div>
-  </div>
+    <!-- PANEL MANAGEMENT -->
+    <div id="managementPanel" class="panel">
+        <h2>⚙️ MANAGEMENT DATA</h2>
+        
+        <div style="display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem;">
+            <div style="flex:1; min-width: 250px;">
+                <h3>👨‍⚖️ JURI</h3>
+                <div class="form-group">
+                    <label>NAMA JURI</label>
+                    <input type="text" id="juriName" placeholder="CONTOH: BAPAK HERU">
+                </div>
+                <button class="btn-primary" id="addJuriBtn">+ TAMBAH JURI</button>
+                <div id="juriList" class="card-list" style="margin-top: 1rem;"></div>
+            </div>
 
-  <div class="table-wrapper">
-    <table id="scoreTable">
-      <thead>
-        <tr>
-          <th>PDCA/RP</th><th>ITEM / KRITERIA</th><th>BOBOT</th><th>Deskripsi Singkat</th><th>Nilai (1-10)</th><th>Hasil (Bobot x Nilai)</th>
-        </tr>
-        <tr style="background:#f2f9fc; font-size:0.75rem;">
-          <th colspan="6">✨ Skala: Kurang(1-4) | Cukup(5-6) | Baik(7-8) | Excellent(9-10)</th>
-        </tr>
-      </thead>
-      <tbody id="dynamicRows">
-        <!-- data akan diisi javascript berdasarkan kriteria dari excel -->
-      </tbody>
-    </table>
-  </div>
+            <div style="flex:2; min-width: 300px;">
+                <h3>👥 PESERTA</h3>
+                <div class="grid-2">
+                    <div class="form-group"><label>NAMA PESERTA</label><input type="text" id="pesertaName" placeholder="NAMA TIM/PESERTA"></div>
+                    <div class="form-group"><label>CHANNEL</label>
+                        <select id="channelSelect">
+                            <option value="SS">SS</option>
+                            <option value="QCC">QCC</option>
+                            <option value="QCP">QCP</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group"><label>JUDUL CONIM (PRESENTASI)</label><input type="text" id="judulConim" placeholder="JUDUL LENGKAP"></div>
+                <button class="btn-primary" id="addPesertaBtn">+ TAMBAH PESERTA</button>
+                <div id="pesertaList" class="card-list" style="margin-top: 1rem;"></div>
+            </div>
+        </div>
 
-  <!-- Feedback strength & opprtunity -->
-  <div class="feedback-section">
-    <div class="feedback-box">
-      <h3>💪 STRENGTH POINT (Kelebihan / unggulan)</h3>
-      <textarea rows="3" id="strengthPoint" placeholder="Tulis poin kekuatan dari presentasi / proyek ini ..."></textarea>
-    </div>
-    <div class="feedback-box">
-      <h3>🔄 OPPORTUNITY FOR IMPROVEMENT (Area pengembangan)</h3>
-      <textarea rows="3" id="improvementPoint" placeholder="Saran perbaikan, potensi yang bisa ditingkatkan ..."></textarea>
-    </div>
-  </div>
+        <hr style="margin: 1rem 0;">
 
-  <!-- Total skor & actions -->
-  <div class="result-area">
-    <div class="total-score">🏆 TOTAL SKOR: <span id="totalScore">0</span> <span style="font-size:0.9rem;">/ Maks 250</span></div>
-    <div>
-      <button class="btn-reset" id="resetBtn">↺ Reset Nilai</button>
-      <button class="btn-reset" id="exportBtn" style="background:#1f6e7a; color:white; border:none; margin-left:12px;">📄 Simpan / Ringkasan</button>
+        <h3>📋 KRITERIA PENILAIAN (FLEKSIBEL: EDIT, HAPUS, TAMBAH)</h3>
+        <div class="grid-2">
+            <div class="form-group"><label>KODE KRITERIA</label><input type="text" id="kriteriaKode" placeholder="CONTOH: 1A, 2C, 6A"></div>
+            <div class="form-group"><label>NAMA KRITERIA</label><input type="text" id="kriteriaName" placeholder="CONTOH: IDENTIFIKASI MASALAH"></div>
+        </div>
+        <div class="form-group">
+            <label>DESKRIPSI KURANG (SKOR 1-4)</label>
+            <textarea id="descKurang" rows="2" placeholder="DESKRIPSI UNTUK NILAI KURANG..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>DESKRIPSI CUKUP (SKOR 5-6)</label>
+            <textarea id="descCukup" rows="2" placeholder="DESKRIPSI UNTUK NILAI CUKUP..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>DESKRIPSI BAIK (SKOR 7-8)</label>
+            <textarea id="descBaik" rows="2" placeholder="DESKRIPSI UNTUK NILAI BAIK..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>DESKRIPSI EXCELLENT (SKOR 9-10)</label>
+            <textarea id="descExcellent" rows="2" placeholder="DESKRIPSI UNTUK NILAI EXCELLENT..."></textarea>
+        </div>
+        <div class="grid-2">
+            <div class="form-group"><label>BOBOT MAKSIMAL</label><input type="number" id="kriteriaBobot" placeholder="100" value="10"></div>
+            <div class="form-group"><label>URUTAN TAMPIL</label><input type="number" id="kriteriaUrutan" placeholder="1,2,3..." value="1"></div>
+        </div>
+        <button class="btn-primary" id="addKriteriaBtn">➕ TAMBAH KRITERIA BARU</button>
+        <button class="btn-primary" id="resetDefaultKriteriaBtn" style="background: #64748b;">🔄 RESET KE DEFAULT PDCARP</button>
+        
+        <div id="kriteriaListMgmt" class="card-list" style="margin-top: 1.5rem;"></div>
     </div>
-  </div>
-  <div class="footer-note">
-    * Penilaian mengacu kriteria konvensi (SS/OSR/QCC/QCP) - Nilai diisi 1-10, hasil otomatis terbobot. Max 250 poin.<br>
-    Strength & Improvement akan disertakan dalam ringkasan.
-  </div>
+
+    <!-- PANEL FORM INPUT -->
+    <div id="formPanel" class="panel active-panel">
+        <h2>📝 FORM PENILAIAN PESERTA</h2>
+        <div id="formAlert"></div>
+        <div class="form-group">
+            <label>PILIH PESERTA</label>
+            <select id="dropdownPeserta"></select>
+        </div>
+        <div class="form-group">
+            <label>PILIH JURI (OPSIONAL)</label>
+            <select id="dropdownJuri">
+                <option value="">TANPA JURI</option>
+            </select>
+        </div>
+        <div id="dynamicKriteriaNilai"></div>
+        <button class="btn-primary" id="submitPenilaianBtn">✅ SUBMIT PENILAIAN</button>
+        <div id="hasilPenilaian" style="margin-top: 2rem;"></div>
+    </div>
+
+    <!-- PANEL DASHBOARD placeholder -->
+    <div id="dashboardPanel" class="panel">
+        <h2>📊 DASHBOARD PENILAIAN</h2>
+        <p style="color: gray; text-transform: uppercase;">🚧 FITUR DASHBOARD MENYUSUL (STATISTIK, GRAFIK, REKAP NILAI PER CHANNEL, PER KRITERIA).</p>
+    </div>
 </div>
 
 <script>
-  // =============== DATA KRITERIA BERDASARKAN SHEET "Penilaian Saat Proses Seleksi" ===============
-  // diambil dari sheet utama (kolom item, bobot, kriteria, deskripsi ringkas)
-  const kriteriaList = [
-    { group: "PLAN", item: "1. Masalah, Tema, Sasaran", kriteria: "1a. Identifikasi masalah & penentuan tema", bobot: 0.15, desc: "Prioritas data mutu & kebijakan perusahaan" },
-    { group: "PLAN", item: "1. Masalah, Tema, Sasaran", kriteria: "1b. Visualisasi/simulasi identifikasi masalah", bobot: 0.15, desc: "Sasaran terukur & hilangkan masalah" },
-    { group: "PLAN", item: "2. Proses Analisa Masalah & Rencana Perbaikan", kriteria: "2a. Analisis sebab akibat", bobot: 0.10, desc: "Korelasi logis & lengkap" },
-    { group: "PLAN", item: "2. Proses Analisa Masalah & Rencana Perbaikan", kriteria: "2b. Analisis & penetapan akar penyebab", bobot: 0.10, desc: "Prioritas berdasarkan data & fakta" },
-    { group: "PLAN", item: "2. Proses Analisa Masalah & Rencana Perbaikan", kriteria: "2c. Perencanaan perbaikan", bobot: 0.10, desc: "5W+2H jelas & benar" },
-    { group: "PLAN", item: "2. Proses Analisa Masalah & Rencana Perbaikan", kriteria: "2d. Pemanfaatan peranan pihak terkait", bobot: 0.10, desc: "Didukung aktif & efektif" },
-    { group: "PLAN", item: "3. Solusi (Jumlah & Kategori)", kriteria: "3a. Kreativitas penyelesaian masalah", bobot: 0.20, desc: "Alternatif solusi dgn analisis kuantitatif" },
-    { group: "PLAN", item: "3. Solusi (Jumlah & Kategori)", kriteria: "3b. Kategori Solusi", bobot: 0.20, desc: "Inovasi nasional / internasional" },
-    { group: "DO", item: "4. Mutu proses Pelaksanaan", kriteria: "4a. Kerjasama anggota", bobot: 0.05, desc: "Kontribusi optimal & proporsional" },
-    { group: "DO", item: "4. Mutu proses Pelaksanaan", kriteria: "4b. Pemantauan, penerapan, perbaikan", bobot: 0.05, desc: "Pemantauan efektif + dokumentasi lengkap" },
-    { group: "DO", item: "5. Tingkat kesulitan", kriteria: "5a. Tingkat kesulitan Upaya perbaikan", bobot: 0.05, desc: "Belajar & berbagi kompetensi baru" },
-    { group: "CHECK", item: "6. Ketepatan & Kelengkapan Evaluasi", kriteria: "6a. Evaluasi hasil (cakupan QCDSMPE)", bobot: 0.05, desc: "Mencakup 6-7 aspek QCDSMPE" },
-    { group: "CHECK", item: "6. Ketepatan & Kelengkapan Evaluasi", kriteria: "6b. Evaluasi terhadap aspek mutu", bobot: 0.05, desc: "Semua aspek tepat & akurat" },
-    { group: "CHECK", item: "6. Ketepatan & Kelengkapan Evaluasi", kriteria: "6c. Pengelolaan dampak", bobot: 0.05, desc: "Dampak negatif tertanggulangi & positif optimal" },
-    { group: "CHECK", item: "7. Dampak Hasil Perbaikan", kriteria: "7a. Rasio pencapaian sebelum & sesudah", bobot: 0.20, desc: "Peningkatan >100% / NQI signifikan" },
-    { group: "CHECK", item: "7. Dampak Hasil Perbaikan", kriteria: "7b. Lingkup dampak / Penerapan", bobot: 0.20, desc: "Aplikatif industri lain / masyarakat luas" },
-    { group: "CHECK", item: "7. Dampak Hasil Perbaikan", kriteria: "7c. Prestasi Kinerja", bobot: 0.20, desc: "Melampaui prestasi kompetitor dunia" },
-    { group: "ACTION", item: "8. Standardisasi & Continuous Improvement", kriteria: "8a. Standardisasi", bobot: 0.05, desc: "Standar baru lengkap & terjamin penerapannya" },
-    { group: "ACTION", item: "8. Standardisasi & Continuous Improvement", kriteria: "8b. Penetapan tema berikutnya", bobot: 0.05, desc: "Prioritas semua aspek mutu, data lengkap akurat" },
-    { group: "REPORT", item: "9. Mutu Makalah", kriteria: "9a. Sistematika & mutu penulisan", bobot: 0.05, desc: "Terstruktur, informatif & detail" },
-    { group: "REPORT", item: "9. Mutu Makalah", kriteria: "9b. Estetika & daya tarik risalah", bobot: 0.05, desc: "Ilustrasi proporsional & sangat menarik" },
-    { group: "REPORT", item: "9. Mutu Makalah", kriteria: "9c. Kesesuaian dengan aturan", bobot: 0.05, desc: "Sesuai aturan baku berbagai format" },
-    { group: "PRESENTATION", item: "10. Mutu Presentasi", kriteria: "10a. Kejelasan presentasi", bobot: 0.10, desc: "Animasi tepat & memperjelas kasus" },
-    { group: "PRESENTATION", item: "10. Mutu Presentasi", kriteria: "10b. Unsur hiburan", bobot: 0.10, desc: "Sangat menarik & menghibur pemirsa" },
-    { group: "PRESENTATION", item: "10. Mutu Presentasi", kriteria: "10c. Pengelolaan presentasi", bobot: 0.10, desc: "Semua anggota kuasai materi & waktu efektif" }
-  ];
+    // ======================= DEFAULT KRITERIA PDCARP DENGAN RUBRIK LENGKAP =======================
+    const DEFAULT_KRITERIA = [
+        { 
+            id: 1001, kode: "1A", nama: "IDENTIFIKASI MASALAH & PENENTUAN TEMA", 
+            descKurang: "TIDAK ADA IDENTIFIKASI YANG JELAS DITINJAU DARI ASPEK MUTU, TEMA TIDAK SESUAI DENGAN KEBIJAKAN PERUSAHAAN",
+            descCukup: "PRIORITAS DITINJAU DARI SEBAGIAN ASPEK MUTU, DATA TIDAK LENGKAP DAN ATAU KURANG AKURAT, TEMA KURANG SESUAI DENGAN KEBIJAKAN PERUSAHAAN",
+            descBaik: "PRIORITAS DITINJAU DARI SEBAGIAN ASPEK MUTU, DATA LENGKAP DAN AKURAT, DAN TEMA SESUAI DENGAN KEBIJAKAN PERUSAHAAN",
+            descExcellent: "PRIORITAS DITINJAU DARI SEMUA ASPEK MUTU, DATA LENGKAP DAN AKURAT, DAN TEMA SESUAI DENGAN KEBIJAKAN PERUSAHAAN",
+            bobot: 10, urutan: 1 
+        },
+        { 
+            id: 1002, kode: "2A", nama: "ANALISIS SEBAB AKIBAT", 
+            descKurang: "KORELASI TIDAK LOGIS DAN TIDAK LENGKAP",
+            descCukup: "SEBAGIAN KORELASI TIDAK LOGIS DAN TIDAK LENGKAP",
+            descBaik: "KORELASI LOGIS TAPI TIDAK LENGKAP",
+            descExcellent: "KORELASI LOGIS & LENGKAP",
+            bobot: 10, urutan: 2 
+        },
+        { 
+            id: 1003, kode: "2C", nama: "PERENCANAAN PERBAIKAN (5W+2H)", 
+            descKurang: "PERENCANAAN TIDAK SISTEMATIS",
+            descCukup: "MELIPUTI ASPEK 5W + 2H TAPI TIDAK JELAS ATAU TIDAK BENAR",
+            descBaik: "MELIPUTI ASPEK 5W + 2H SECARA GLOBAL, JELAS & BENAR",
+            descExcellent: "MELIPUTI ASPEK 5W + 2H SECARA DETAIL, JELAS & BENAR",
+            bobot: 10, urutan: 3 
+        },
+        { 
+            id: 1004, kode: "2D", nama: "PEMANFAATAN PERANAN PIHAK TERKAIT", 
+            descKurang: "KURANG DIDUKUNG PIHAK TERKAIT",
+            descCukup: "DIDUKUNG BEBERAPA PIHAK TERKAIT",
+            descBaik: "DIDUKUNG SEMUA PIHAK TERKAIT SECARA AKTIF MAUPUN PASIF",
+            descExcellent: "DIDUKUNG SEMUA PIHAK YANG TERKAIT SECARA AKTIF DAN EFEKTIF",
+            bobot: 10, urutan: 4 
+        },
+        { 
+            id: 1005, kode: "3B", nama: "KATEGORI SOLUSI", 
+            descKurang: "MENIRU DARI YANG SUDAH ADA",
+            descCukup: "MENINGKATKAN KINERJA PRODUK DAN ATAU SISTEM YANG ADA",
+            descBaik: "INOVASI DARI PRODUK DAN ATAU SISTEM YANG ADA (LINGKUP NASIONAL)",
+            descExcellent: "MENCIPTAKAN PRODUK DAN ATAU SISTEM YANG BENAR-BENAR BARU (INVENSI LINGKUP INTERNATIONAL) DAN DAPAT DIPATENKAN",
+            bobot: 10, urutan: 5 
+        },
+        { 
+            id: 1006, kode: "4B", nama: "PEMANTAUAN, PENERAPAN, PERBAIKAN", 
+            descKurang: "PEMANTAUAN DILAKUKAN SECARA SPONTAN DAN TAK TERDOKUMENTASI",
+            descCukup: "PEMANTAUAN DILAKUKAN SECARA SISTEMATIS TANPA DOKUMENTASI YANG MEMADAI",
+            descBaik: "PEMANTAUAN DILAKUKAN DISERTAI DOKUMENTASI PADA PROSES UTAMA",
+            descExcellent: "PEMANTAUAN DILAKUKAN DENGAN EFEKTIF DISERTAI DOKUMENTASI YANG LENGKAP",
+            bobot: 10, urutan: 6 
+        },
+        { 
+            id: 1007, kode: "6A", nama: "EVALUASI HASIL (KEUNTUNGAN QCDSMPE)", 
+            descKurang: "KEUNTUNGAN DIBAWAH 2 ASPEK QCDSMPE",
+            descCukup: "KEUNTUNGAN MENCANGKUP 2-3 ASPEK QCDSMPE",
+            descBaik: "KEUNTUNGAN MENCANGKUP 4-5 ASPEK QCDSMPE",
+            descExcellent: "KEUNTUNGAN MENCANGKUP 6-7 ASPEK QCDSMPE",
+            bobot: 10, urutan: 7 
+        },
+        { 
+            id: 1008, kode: "8A", nama: "STANDARDISASI", 
+            descKurang: "STANDAR BARU BELUM DISAHKAN",
+            descCukup: "STANDAR BARU DI SAHKAN TAPI TIDAK LENGKAP DAN TIDAK TERJAMIN PENERAPANNYA",
+            descBaik: "STANDAR BARU LENGKAP TELAH DI SAHKAN TAPI TIDAK TERJAMIN PENERAPANNYA",
+            descExcellent: "STANDAR BARU LENGKAP TELAH DI SAHKAN DAN TERJAMIN PENERAPANNYA",
+            bobot: 10, urutan: 8 
+        },
+        { 
+            id: 1009, kode: "10A", nama: "KEJELASAN PRESENTASI & UNSUR HIBURAN", 
+            descKurang: "PRESENTASI TIDAK INFORMATIF",
+            descCukup: "PRESENTASI KURANG JELAS / KURANG INFORMATIF",
+            descBaik: "MENGGUNAKAN ANIMASI / PERAGA TAPI KURANG MEMPERJELAS KASUS YANG DIHADAPI",
+            descExcellent: "MENGGUNAKAN ANIMASI/PERAGA YANG TEPAT DAN MEMPERJELAS KASUS YANG DIHADAPI",
+            bobot: 10, urutan: 9 
+        }
+    ];
 
-  // validasi total bobot (seharusnya 1.0 => 0.15+0.15+0.1*4+0.2*2+0.05*7+0.2*3+0.05*2+0.05*3+0.1*3 = 2.5? Tapi skala hasil max 250 artinya total bobot kumulatif 25, tapi pada form max 250 = (bobot*10*25)? Konsisten dengan sheet asli: max 250. 
-  // di sheet asli perhitungan = bobot * score, score max 10, total bobot semua item = 2.5? Check: 0.15+0.15+0.1+0.1+0.1+0.1+0.2+0.2+0.05+0.05+0.05+0.05+0.05+0.05+0.2+0.2+0.2+0.05+0.05+0.05+0.05+0.05+0.1+0.1+0.1 = 2.5 . Maka total maks = 2.5 * 10 = 25? tapi di excel hasil result = 250 dari (3x5)?? Itu mungkin perkalian tambahan. Namun karena kita gunakan langsung bobot x score (1-10) maka max teoretis 25*10 = 250. Jadi konsisten: totalSkor maks 250.
-  
-  // render table
-  function renderTable() {
-    const tbody = document.getElementById('dynamicRows');
-    tbody.innerHTML = '';
-    let prevGroup = '';
-    kriteriaList.forEach((k, idx) => {
-      const row = tbody.insertRow();
-      if (prevGroup !== k.group) {
-        const groupCell = row.insertCell(0);
-        groupCell.textContent = k.group;
-        groupCell.style.fontWeight = 'bold';
-        groupCell.style.backgroundColor = '#eef3f7';
-        groupCell.rowSpan = kriteriaList.filter(item => item.group === k.group).length;
-        prevGroup = k.group;
-      } else {
-        row.insertCell(0); // kosong karena rowspan
-      }
-      // Item kolom
-      const itemCell = row.insertCell(1);
-      itemCell.textContent = k.item;
-      // bobot
-      const bobotCell = row.insertCell(2);
-      bobotCell.textContent = (k.bobot * 100).toFixed(0) + '%';
-      bobotCell.classList.add('bobot-cell');
-      // deskripsi singkat
-      const descCell = row.insertCell(3);
-      descCell.textContent = k.desc;
-      descCell.style.fontSize = '0.8rem';
-      // select nilai
-      const selectCell = row.insertCell(4);
-      const select = document.createElement('select');
-      select.className = 'score-select';
-      select.setAttribute('data-idx', idx);
-      for (let s = 1; s <= 10; s++) {
-        const option = document.createElement('option');
-        option.value = s;
-        option.textContent = s;
-        if (s === 7) option.selected = true; // default nilai 7 (Baik)
-        select.appendChild(option);
-      }
-      select.addEventListener('change', () => updateTotal());
-      selectCell.appendChild(select);
-      // hasil kolom
-      const hasilCell = row.insertCell(5);
-      hasilCell.classList.add('hasil-cell');
-      hasilCell.id = `hasil_${idx}`;
-      hasilCell.textContent = '0';
+    // DATA STORAGE
+    let juriData = JSON.parse(localStorage.getItem('juriData')) || [];
+    let pesertaData = JSON.parse(localStorage.getItem('pesertaData')) || [];
+    let kriteriaData = JSON.parse(localStorage.getItem('kriteriaData')) || [];
+    let penilaianData = JSON.parse(localStorage.getItem('penilaianData')) || [];
+
+    // INIT DEFAULT KRITERIA JIKA KOSONG
+    if(kriteriaData.length === 0) {
+        kriteriaData = JSON.parse(JSON.stringify(DEFAULT_KRITERIA));
+        saveAll();
+    }
+
+    function saveAll() {
+        localStorage.setItem('juriData', JSON.stringify(juriData));
+        localStorage.setItem('pesertaData', JSON.stringify(pesertaData));
+        localStorage.setItem('kriteriaData', JSON.stringify(kriteriaData));
+        localStorage.setItem('penilaianData', JSON.stringify(penilaianData));
+    }
+
+    function renderJuri() {
+        const container = document.getElementById('juriList');
+        if(!container) return;
+        if(juriData.length === 0) { container.innerHTML = '<div class="card-item">BELUM ADA JURI</div>'; return; }
+        container.innerHTML = juriData.map(j => `
+            <div class="card-item">
+                <span>👨‍⚖️ ${j.nama.toUpperCase()}</span>
+                <button class="btn-danger" onclick="hapusJuri(${j.id})">HAPUS</button>
+            </div>
+        `).join('');
+        
+        const dropdownJuri = document.getElementById('dropdownJuri');
+        if(dropdownJuri) {
+            dropdownJuri.innerHTML = '<option value="">TANPA JURI</option>' + juriData.map(j => `<option value="${j.id}">${j.nama.toUpperCase()}</option>`).join('');
+        }
+    }
+
+    function renderPeserta() {
+        const container = document.getElementById('pesertaList');
+        if(!container) return;
+        if(pesertaData.length === 0) { container.innerHTML = '<div class="card-item">BELUM ADA PESERTA</div>'; return; }
+        container.innerHTML = pesertaData.map(p => `
+            <div class="card-item">
+                <div><strong>${p.nama.toUpperCase()}</strong> (${p.channel}) <br> <small>${p.judulConim.toUpperCase()}</small></div>
+                <button class="btn-danger" onclick="hapusPeserta(${p.id})">HAPUS</button>
+            </div>
+        `).join('');
+        
+        const dropdown = document.getElementById('dropdownPeserta');
+        if(dropdown) {
+            dropdown.innerHTML = '<option value="">-- PILIH PESERTA --</option>' + 
+                pesertaData.map(p => `<option value="${p.id}">${p.nama.toUpperCase()} (${p.channel}) - ${p.judulConim.substring(0,40).toUpperCase()}</option>`).join('');
+        }
+    }
+
+    function renderRubrik(kriteria) {
+        return `
+            <div class="rubric-grid">
+                <div class="rubric-item"><span class="rubric-score">KURANG (1-4)</span><div class="rubric-desc">${(kriteria.descKurang || '-').toUpperCase()}</div></div>
+                <div class="rubric-item"><span class="rubric-score">CUKUP (5-6)</span><div class="rubric-desc">${(kriteria.descCukup || '-').toUpperCase()}</div></div>
+                <div class="rubric-item"><span class="rubric-score">BAIK (7-8)</span><div class="rubric-desc">${(kriteria.descBaik || '-').toUpperCase()}</div></div>
+                <div class="rubric-item"><span class="rubric-score">EXCELLENT (9-10)</span><div class="rubric-desc">${(kriteria.descExcellent || '-').toUpperCase()}</div></div>
+            </div>
+        `;
+    }
+
+    function renderKriteriaMgmt() {
+        const container = document.getElementById('kriteriaListMgmt');
+        if(!container) return;
+        if(kriteriaData.length === 0) { 
+            container.innerHTML = '<div class="card-item">BELUM ADA KRITERIA. TEKAN RESET DEFAULT ATAU TAMBAH MANUAL.</div>'; 
+            return; 
+        }
+        const sorted = [...kriteriaData].sort((a,b) => (a.urutan || 999) - (b.urutan || 999));
+        container.innerHTML = sorted.map(k => `
+            <div class="card-item" style="flex-direction:column; align-items:flex-start;">
+                <div style="width:100%; display:flex; justify-content:space-between; flex-wrap:wrap;">
+                    <div><strong>[${k.kode || '-'}] ${k.nama.toUpperCase()}</strong> <span class="badge">MAX: ${k.bobot}</span> <span class="badge">URUTAN: ${k.urutan || '-'}</span></div>
+                    <div>
+                        <button class="btn-warning" onclick="editKriteria(${k.id})">✏️ EDIT</button>
+                        <button class="btn-danger" onclick="hapusKriteria(${k.id})">HAPUS</button>
+                    </div>
+                </div>
+                ${renderRubrik(k)}
+            </div>
+        `).join('');
+        renderFormKriteriaNilai();
+    }
+
+    window.editKriteria = function(id) {
+        const k = kriteriaData.find(k => k.id === id);
+        if(!k) return;
+        const newNama = prompt("EDIT NAMA KRITERIA:", k.nama);
+        if(newNama && newNama.trim()) k.nama = newNama.trim().toUpperCase();
+        const newBobot = prompt("EDIT BOBOT MAKSIMAL:", k.bobot);
+        if(newBobot && !isNaN(parseInt(newBobot))) k.bobot = parseInt(newBobot);
+        const newKode = prompt("EDIT KODE (CONTOH: 1A, 2C):", k.kode || "");
+        if(newKode) k.kode = newKode.trim().toUpperCase();
+        const newUrutan = prompt("EDIT URUTAN TAMPIL (ANGKA):", k.urutan || 1);
+        if(newUrutan && !isNaN(parseInt(newUrutan))) k.urutan = parseInt(newUrutan);
+        
+        k.descKurang = prompt("DESKRIPSI KURANG (SKOR 1-4):", k.descKurang || "") || "";
+        k.descCukup = prompt("DESKRIPSI CUKUP (SKOR 5-6):", k.descCukup || "") || "";
+        k.descBaik = prompt("DESKRIPSI BAIK (SKOR 7-8):", k.descBaik || "") || "";
+        k.descExcellent = prompt("DESKRIPSI EXCELLENT (SKOR 9-10):", k.descExcellent || "") || "";
+        
+        saveAll();
+        renderKriteriaMgmt();
+    };
+
+    function renderFormKriteriaNilai() {
+        const container = document.getElementById('dynamicKriteriaNilai');
+        if(!container) return;
+        if(kriteriaData.length === 0) {
+            container.innerHTML = '<div class="alert alert-error">⚠️ BELUM ADA KRITERIA, TAMBAHKAN DULU DI MENU MANAGEMENT.</div>';
+            return;
+        }
+        const sorted = [...kriteriaData].sort((a,b) => (a.urutan || 999) - (b.urutan || 999));
+        container.innerHTML = `<h3>📌 PENILAIAN PER KRITERIA (0 - ${Math.max(...sorted.map(k=>k.bobot),10)})</h3>` + 
+            sorted.map(k => `
+                <div class="kriteria-item">
+                    <div class="kriteria-header">
+                        [${k.kode || ''}] ${k.nama.toUpperCase()} (MAX: ${k.bobot})
+                    </div>
+                    ${renderRubrik(k)}
+                    <div style="margin-top: 0.5rem;">
+                        <label style="font-size:0.75rem;">MASUKKAN NILAI (0-${k.bobot}):</label>
+                        <input type="number" class="nilai-kriteria nilai-input" data-kriteriaid="${k.id}" data-max="${k.bobot}" 
+                               placeholder="NILAI 0-${k.bobot}" min="0" max="${k.bobot}" step="1">
+                    </div>
+                </div>
+            `).join('');
+    }
+
+    function submitPenilaian() {
+        const pesertaId = document.getElementById('dropdownPeserta').value;
+        if(!pesertaId) {
+            showAlert('❌ PILIH PESERTA DULU!', 'error');
+            return;
+        }
+        const juriId = document.getElementById('dropdownJuri').value;
+        const nilaiInputs = document.querySelectorAll('.nilai-kriteria');
+        let nilaiPerKriteria = [];
+        let valid = true;
+        nilaiInputs.forEach(inp => {
+            let kriteriaId = parseInt(inp.dataset.kriteriaid);
+            let maxVal = parseInt(inp.dataset.max);
+            let val = parseInt(inp.value);
+            if(isNaN(val)) val = 0;
+            if(val < 0 || val > maxVal) valid = false;
+            nilaiPerKriteria.push({ kriteriaId, nilai: val });
+        });
+        if(!valid) {
+            showAlert('⚠️ ADA NILAI YANG MELEBIHI BOBOT MAKSIMAL ATAU TIDAK VALID!', 'error');
+            return;
+        }
+
+        const newPenilaian = {
+            id: Date.now(),
+            pesertaId: parseInt(pesertaId),
+            juriId: juriId ? parseInt(juriId) : null,
+            tanggal: new Date().toLocaleString(),
+            nilaiPerKriteria: nilaiPerKriteria
+        };
+        penilaianData.push(newPenilaian);
+        saveAll();
+        showAlert('✅ PENILAIAN BERHASIL DISIMPAN!', 'success');
+        tampilkanHasilPenilaian(parseInt(pesertaId));
+    }
+
+    function showAlert(msg, type) {
+        const alertDiv = document.getElementById('formAlert');
+        alertDiv.innerHTML = `<div class="alert ${type === 'error' ? 'alert-error' : ''}">${msg.toUpperCase()}</div>`;
+        setTimeout(() => { if(alertDiv) alertDiv.innerHTML = ''; }, 3000);
+    }
+
+    function tampilkanHasilPenilaian(pesertaId) {
+        const container = document.getElementById('hasilPenilaian');
+        const peserta = pesertaData.find(p => p.id === pesertaId);
+        if(!peserta) return;
+        const penilaianPeserta = penilaianData.filter(p => p.pesertaId === pesertaId);
+        if(penilaianPeserta.length === 0) {
+            container.innerHTML = `<div class="card-item">BELUM ADA PENILAIAN UNTUK ${peserta.nama.toUpperCase()}</div>`;
+            return;
+        }
+        let html = `<h3>📊 RIWAYAT PENILAIAN: ${peserta.nama.toUpperCase()} (${peserta.channel})</h3>`;
+        penilaianPeserta.forEach((pen, idx) => {
+            let total = 0;
+            let detail = '<ul style="margin-left:1rem;">';
+            pen.nilaiPerKriteria.forEach(nk => {
+                const kriteria = kriteriaData.find(k => k.id === nk.kriteriaId);
+                const namaKrit = kriteria ? `[${kriteria.kode || ''}] ${kriteria.nama.toUpperCase()}` : `KRITERIA ID:${nk.kriteriaId}`;
+                const maxBobot = kriteria ? kriteria.bobot : 100;
+                detail += `<li>${namaKrit}: ${nk.nilai} / ${maxBobot}</li>`;
+                total += nk.nilai;
+            });
+            detail += `</ul><strong>TOTAL NILAI: ${total}</strong>`;
+            html += `<div class="card-item" style="flex-direction:column; align-items:flex-start; margin-top:1rem;">
+                        <div><strong>PENILAIAN #${idx+1}</strong> (${pen.tanggal}) ${pen.juriId ? `👨‍⚖️ JURI ID:${pen.juriId}` : ''}</div>
+                        ${detail}
+                        <button class="btn-danger" style="margin-top:8px;" onclick="hapusPenilaian(${pen.id})">HAPUS PENILAIAN</button>
+                    </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    window.hapusJuri = function(id) {
+        juriData = juriData.filter(j => j.id !== id);
+        saveAll();
+        renderJuri();
+    };
+    window.hapusPeserta = function(id) {
+        pesertaData = pesertaData.filter(p => p.id !== id);
+        penilaianData = penilaianData.filter(p => p.pesertaId !== id);
+        saveAll();
+        renderPeserta();
+        document.getElementById('hasilPenilaian').innerHTML = '';
+    };
+    window.hapusKriteria = function(id) {
+        kriteriaData = kriteriaData.filter(k => k.id !== id);
+        saveAll();
+        renderKriteriaMgmt();
+    };
+    window.hapusPenilaian = function(id) {
+        penilaianData = penilaianData.filter(p => p.id !== id);
+        saveAll();
+        const selectedPeserta = document.getElementById('dropdownPeserta').value;
+        if(selectedPeserta) tampilkanHasilPenilaian(parseInt(selectedPeserta));
+        else document.getElementById('hasilPenilaian').innerHTML = '';
+        showAlert('🗑️ PENILAIAN DIHAPUS', 'success');
+    };
+
+    function resetToDefaultKriteria() {
+        if(confirm("RESET SEMUA KRITERIA KE DEFAULT PDCARP? DATA PENILAIAN YANG MENGGUNAKAN KRITERIA LAMA AKAN TETAP TERSIMPAN (KRITERIA YANG DIHAPUS AKAN JADI 'UNKNOWN').")) {
+            kriteriaData = JSON.parse(JSON.stringify(DEFAULT_KRITERIA));
+            saveAll();
+            renderKriteriaMgmt();
+            showAlert('✅ KRITERIA DIRESET KE DEFAULT PDCARP', 'success');
+        }
+    }
+
+    // EVENT LISTENERS
+    document.getElementById('addJuriBtn')?.addEventListener('click', () => {
+        const nama = document.getElementById('juriName').value.trim();
+        if(!nama) return alert('MASUKKAN NAMA JURI');
+        juriData.push({ id: Date.now(), nama: nama.toUpperCase() });
+        saveAll();
+        renderJuri();
+        document.getElementById('juriName').value = '';
     });
-    updateTotal();
-  }
+    document.getElementById('addPesertaBtn')?.addEventListener('click', () => {
+        const nama = document.getElementById('pesertaName').value.trim();
+        const channel = document.getElementById('channelSelect').value;
+        const judul = document.getElementById('judulConim').value.trim();
+        if(!nama || !judul) return alert('NAMA PESERTA DAN JUDUL CONIM WAJIB DIISI');
+        pesertaData.push({ id: Date.now(), nama: nama.toUpperCase(), channel, judulConim: judul.toUpperCase() });
+        saveAll();
+        renderPeserta();
+        document.getElementById('pesertaName').value = '';
+        document.getElementById('judulConim').value = '';
+    });
+    document.getElementById('addKriteriaBtn')?.addEventListener('click', () => {
+        const kode = document.getElementById('kriteriaKode').value.trim().toUpperCase();
+        const nama = document.getElementById('kriteriaName').value.trim().toUpperCase();
+        const descKurang = document.getElementById('descKurang').value.trim();
+        const descCukup = document.getElementById('descCukup').value.trim();
+        const descBaik = document.getElementById('descBaik').value.trim();
+        const descExcellent = document.getElementById('descExcellent').value.trim();
+        let bobot = parseInt(document.getElementById('kriteriaBobot').value);
+        let urutan = parseInt(document.getElementById('kriteriaUrutan').value);
+        if(!nama) return alert('NAMA KRITERIA HARUS DIISI');
+        if(isNaN(bobot) || bobot <= 0) bobot = 10;
+        if(isNaN(urutan)) urutan = kriteriaData.length + 1;
+        kriteriaData.push({ id: Date.now(), kode, nama, descKurang, descCukup, descBaik, descExcellent, bobot, urutan });
+        saveAll();
+        renderKriteriaMgmt();
+        document.getElementById('kriteriaKode').value = '';
+        document.getElementById('kriteriaName').value = '';
+        document.getElementById('descKurang').value = '';
+        document.getElementById('descCukup').value = '';
+        document.getElementById('descBaik').value = '';
+        document.getElementById('descExcellent').value = '';
+        document.getElementById('kriteriaBobot').value = '10';
+        document.getElementById('kriteriaUrutan').value = kriteriaData.length + 1;
+    });
+    document.getElementById('resetDefaultKriteriaBtn')?.addEventListener('click', resetToDefaultKriteria);
+    document.getElementById('submitPenilaianBtn')?.addEventListener('click', submitPenilaian);
+    document.getElementById('dropdownPeserta')?.addEventListener('change', (e) => {
+        const id = parseInt(e.target.value);
+        if(id) tampilkanHasilPenilaian(id);
+        else document.getElementById('hasilPenilaian').innerHTML = '';
+    });
 
-  // hitung total
-  function updateTotal() {
-    let total = 0;
-    for (let i = 0; i < kriteriaList.length; i++) {
-      const selectEl = document.querySelector(`.score-select[data-idx='${i}']`);
-      if (selectEl) {
-        const score = parseFloat(selectEl.value);
-        const bobot = kriteriaList[i].bobot;
-        const weighted = score * bobot * 10;  // karena bobot asli 0.15 -> 0.15 * score*10 = skala 250 (karena total bobot*10 maks = 25*10 =250)
-        // alternatif: agar total max 250: setiap item = bobot * score * 10, konsisten
-        const hasilCell = document.getElementById(`hasil_${i}`);
-        const displayWeighted = (score * bobot * 10).toFixed(1);
-        hasilCell.textContent = displayWeighted;
-        total += score * bobot * 10;
-      }
-    }
-    document.getElementById('totalScore').innerText = Math.round(total * 10) / 10;
-  }
+    // NAVIGASI
+    const btns = document.querySelectorAll('.nav-btn');
+    const panels = {
+        dashboard: document.getElementById('dashboardPanel'),
+        form: document.getElementById('formPanel'),
+        management: document.getElementById('managementPanel')
+    };
+    btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const nav = btn.dataset.nav;
+            Object.keys(panels).forEach(p => panels[p].classList.remove('active-panel'));
+            if(nav === 'dashboard') panels.dashboard.classList.add('active-panel');
+            if(nav === 'form') panels.form.classList.add('active-panel');
+            if(nav === 'management') panels.management.classList.add('active-panel');
+            btns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            if(nav === 'management') { renderJuri(); renderPeserta(); renderKriteriaMgmt(); }
+            if(nav === 'form') { renderFormKriteriaNilai(); renderPeserta(); renderJuri(); }
+        });
+    });
 
-  // reset semua nilai ke 7
-  function resetScores() {
-    for (let i = 0; i < kriteriaList.length; i++) {
-      const select = document.querySelector(`.score-select[data-idx='${i}']`);
-      if (select) select.value = '7';
-    }
-    updateTotal();
-    document.getElementById('strengthPoint').value = '';
-    document.getElementById('improvementPoint').value = '';
-  }
-
-  // export ringkasan
-  function exportSummary() {
-    const peserta = document.getElementById('peserta').value.trim() || 'Tidak diisi';
-    const judul = document.getElementById('judul').value.trim() || 'Tidak diisi';
-    const juri = document.getElementById('juri').value.trim() || 'Tidak diisi';
-    const total = document.getElementById('totalScore').innerText;
-    const strength = document.getElementById('strengthPoint').value || 'N/A';
-    const improvement = document.getElementById('improvementPoint').value || 'N/A';
-    
-    // kumpulkan detail nilai per kriteria
-    let detailRows = '';
-    for (let i = 0; i < kriteriaList.length; i++) {
-      const select = document.querySelector(`.score-select[data-idx='${i}']`);
-      const nilai = select ? select.value : '-';
-      const hasil = document.getElementById(`hasil_${i}`)?.innerText || '0';
-      detailRows += `${kriteriaList[i].group} - ${kriteriaList[i].kriteria} : Nilai = ${nilai} | Bobot × Nilai = ${hasil}\n`;
-    }
-    
-    const summary = `=========================================
-📋 HASIL PENILAIAN KONVENSI INOVASI DANKOS 2025
-=========================================
-👥 Peserta       : ${peserta}
-📌 Judul Conim   : ${judul}
-⚖️ Juri          : ${juri}
-🏆 TOTAL SKOR    : ${total} / 250
-
-💪 STRENGTH POINT:
-${strength}
-
-🔄 OPPORTUNITY FOR IMPROVEMENT:
-${improvement}
-
-📊 RINCIAN NILAI PER KRITERIA:
-${detailRows}
------------------------------------------
-*Penilaian berdasarkan pedoman konvensi (SS/OSR/QCC/QCP)
-Tanggal: ${new Date().toLocaleDateString()}
-`;
-    // copy atau download
-    const blob = new Blob([summary], {type: 'text/plain'});
-    const a = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    a.href = url;
-    a.download = `Penilaian_Conim_${peserta.replace(/\s/g, '_')}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    alert('Ringkasan penilaian sudah diunduh (file .txt)');
-  }
-
-  // inisialisasi
-  renderTable();
-  document.getElementById('resetBtn').addEventListener('click', resetScores);
-  document.getElementById('exportBtn').addEventListener('click', exportSummary);
-  // optional: update total jika juri mengubah manual select sudah pakai event listener
+    // INITIAL RENDER
+    renderJuri();
+    renderPeserta();
+    renderKriteriaMgmt();
+    renderFormKriteriaNilai();
 </script>
 </body>
 </html>
