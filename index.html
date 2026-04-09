@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FORM PENILAIAN PDCARP - INTERACTIVE RATING</title>
+    <title>FORM PENILAIAN PDCARP - DASHBOARD LENGKAP</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: system-ui, 'Segoe UI', 'Poppins', sans-serif;
+            font-family: system-ui, 'Segoe UI', sans-serif;
         }
 
         body {
@@ -36,14 +37,12 @@
             font-weight: 600;
             border-radius: 2rem;
             cursor: pointer;
-            transition: all 0.2s;
             color: #334155;
         }
 
         .nav-btn.active {
             background: #3b82f6;
             color: white;
-            box-shadow: 0 4px 8px rgba(59,130,246,0.3);
         }
 
         .container {
@@ -69,6 +68,7 @@
             color: #0f172a;
             border-left: 6px solid #3b82f6;
             padding-left: 1rem;
+            font-size: 1.2rem;
         }
 
         .form-group {
@@ -90,7 +90,6 @@
             border: 1px solid #cbd5e1;
             border-radius: 1rem;
             font-size: 0.95rem;
-            transition: 0.2s;
         }
 
         button.btn-primary {
@@ -101,133 +100,156 @@
             border-radius: 2rem;
             font-weight: 700;
             cursor: pointer;
-            margin-top: 0.5rem;
-            transition: 0.2s;
             text-transform: uppercase;
         }
 
-        button.btn-primary:hover {
-            background: #2563eb;
+        button.btn-danger {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        button.btn-warning {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            font-size: 0.7rem;
         }
 
         .card-list {
-            margin-top: 1.5rem;
+            margin-top: 1rem;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.8rem;
         }
 
         .card-item {
             background: #f8fafc;
             border-radius: 1rem;
-            padding: 1rem;
+            padding: 0.8rem 1rem;
             border-left: 4px solid #3b82f6;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 0.5rem;
         }
 
-        /* STYLE KRITERIA CARD DI FORM INPUT */
+        /* KRITERIA CARD */
         .kriteria-card {
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 1rem;
             margin-bottom: 1.5rem;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            padding: 1rem;
         }
 
         .kriteria-header {
-            background: #f8fafc;
-            padding: 0.8rem 1rem;
-            border-bottom: 2px solid #3b82f6;
             font-weight: 700;
-            color: #1e293b;
             font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            color: #1e293b;
         }
 
-        .rating-buttons {
+        .rubrik-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 0.5rem;
-            padding: 1rem;
-            background: #f8fafc;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px dashed #e2e8f0;
         }
 
-        .rating-btn {
-            padding: 0.8rem 0.5rem;
-            border: 2px solid #e2e8f0;
-            background: white;
-            border-radius: 0.8rem;
-            cursor: pointer;
-            transition: all 0.2s;
+        .rubrik-item {
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.7rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+        .rubrik-kurang { background: #fef2f2; border-left: 3px solid #ef4444; }
+        .rubrik-cukup { background: #fffbeb; border-left: 3px solid #f59e0b; }
+        .rubrik-baik { background: #eff6ff; border-left: 3px solid #3b82f6; }
+        .rubrik-excellent { background: #ecfdf5; border-left: 3px solid #10b981; }
+        
+        .rubrik-title {
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+        .rubrik-desc {
+            color: #475569;
+        }
+
+        /* RATING LINGKARAN */
+        .rating-wrapper {
             text-align: center;
         }
-
-        .rating-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .rating-btn.kurang {
-            border-left: 4px solid #ef4444;
-        }
-        .rating-btn.cukup {
-            border-left: 4px solid #f59e0b;
-        }
-        .rating-btn.baik {
-            border-left: 4px solid #3b82f6;
-        }
-        .rating-btn.excellent {
-            border-left: 4px solid #10b981;
-        }
-        .rating-btn.active {
-            background: #3b82f6;
-            color: white;
-            border-color: #3b82f6;
-        }
-        .rating-btn.active.kurang { background: #ef4444; border-color: #ef4444; color: white; }
-        .rating-btn.active.cukup { background: #f59e0b; border-color: #f59e0b; color: white; }
-        .rating-btn.active.baik { background: #3b82f6; border-color: #3b82f6; color: white; }
-        .rating-btn.active.excellent { background: #10b981; border-color: #10b981; color: white; }
-
-        .rating-level {
-            font-weight: 700;
-            font-size: 0.8rem;
-            margin-bottom: 0.2rem;
-        }
-        .rating-desc {
+        
+        .rating-value {
             font-size: 0.7rem;
-            color: #475569;
-            line-height: 1.3;
+            color: #64748b;
+            margin-bottom: 0.3rem;
+            font-weight: bold;
         }
-        .rating-score {
-            font-size: 0.7rem;
-            font-weight: 600;
-            margin-top: 0.3rem;
-            color: #3b82f6;
+        
+        .rating-circles {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.4rem;
         }
-
-        .nilai-input-wrapper {
-            padding: 0.8rem 1rem;
-            background: white;
-            border-top: 1px solid #e2e8f0;
+        
+        .circle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        .nilai-input-wrapper label {
-            margin-bottom: 0;
-            font-size: 0.7rem;
-        }
-        .nilai-manual {
-            width: 100px;
-            text-align: center;
+            justify-content: center;
             font-weight: bold;
-            font-size: 1rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #f1f5f9;
+            border: 2px solid #cbd5e1;
+            color: #475569;
+        }
+        
+        .circle:hover {
+            transform: scale(1.05);
+            background: #e2e8f0;
+        }
+        
+        .circle.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+            box-shadow: 0 2px 8px rgba(59,130,246,0.4);
+        }
+        
+        .circle.active[data-score="1"], .circle.active[data-score="2"], .circle.active[data-score="3"], .circle.active[data-score="4"] {
+            background: #ef4444;
+            border-color: #ef4444;
+        }
+        .circle.active[data-score="5"], .circle.active[data-score="6"] {
+            background: #f59e0b;
+            border-color: #f59e0b;
+        }
+        .circle.active[data-score="7"], .circle.active[data-score="8"] {
+            background: #3b82f6;
+            border-color: #3b82f6;
+        }
+        .circle.active[data-score="9"], .circle.active[data-score="10"] {
+            background: #10b981;
+            border-color: #10b981;
         }
 
         .grid-2 {
@@ -242,129 +264,173 @@
             padding: 0.8rem;
             border-radius: 1rem;
             margin-bottom: 1rem;
-            text-transform: uppercase;
-            font-size: 0.8rem;
             font-weight: bold;
+            font-size: 0.8rem;
         }
 
         .alert-error {
             background: #fee2e2;
             color: #b91c1c;
         }
+        
+        .selected-value {
+            display: inline-block;
+            margin-left: 0.5rem;
+            font-weight: bold;
+            color: #3b82f6;
+        }
 
-        .badge {
-            background: #e2e8f0;
+        /* DASHBOARD STYLES */
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: #f8fafc;
+            border-radius: 1rem;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .stat-card h4 {
+            margin-bottom: 0.8rem;
+            color: #1e293b;
+            border-bottom: 2px solid #3b82f6;
+            display: inline-block;
+            padding-bottom: 0.3rem;
+        }
+        
+        .peserta-score-card {
+            background: white;
+            border-radius: 0.8rem;
+            padding: 0.8rem;
+            margin-bottom: 0.8rem;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .peserta-name {
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .score-badge {
+            display: inline-block;
+            background: #3b82f6;
+            color: white;
             padding: 0.2rem 0.6rem;
             border-radius: 1rem;
             font-size: 0.7rem;
-            font-weight: bold;
+            margin-top: 0.3rem;
         }
-
-        button.btn-danger {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 0.3rem 0.8rem;
-            border-radius: 1rem;
-            cursor: pointer;
-            text-transform: uppercase;
+        
+        .juri-list {
             font-size: 0.7rem;
-            font-weight: bold;
+            color: #64748b;
+            margin-top: 0.3rem;
         }
-
-        button.btn-warning {
-            background: #f59e0b;
-            color: white;
-            border: none;
-            padding: 0.3rem 0.8rem;
-            border-radius: 1rem;
-            cursor: pointer;
-            margin-right: 0.5rem;
-            text-transform: uppercase;
-            font-size: 0.7rem;
-            font-weight: bold;
+        
+        canvas {
+            max-height: 400px;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="navbar">
-        <button class="nav-btn" data-nav="dashboard">📊 DASHBOARD (MENYUSUL)</button>
+        <button class="nav-btn" data-nav="dashboard">📊 DASHBOARD</button>
         <button class="nav-btn active" data-nav="form">📝 FORM INPUT</button>
         <button class="nav-btn" data-nav="management">⚙️ MANAGEMENT</button>
     </div>
 
-    <!-- PANEL MANAGEMENT (SAMA SEPERTI SEBELUMNYA) -->
+    <!-- MANAGEMENT PANEL -->
     <div id="managementPanel" class="panel">
         <h2>⚙️ MANAGEMENT DATA</h2>
-        <div style="display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem;">
-            <div style="flex:1; min-width: 250px;">
-                <h3>👨‍⚖️ JURI</h3>
-                <div class="form-group"><label>NAMA JURI</label><input type="text" id="juriName" placeholder="CONTOH: BAPAK HERU"></div>
-                <button class="btn-primary" id="addJuriBtn">+ TAMBAH JURI</button>
+        <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+            <div style="flex:1">
+                <h3>JURI</h3>
+                <input type="text" id="juriName" placeholder="Nama Juri">
+                <button class="btn-primary" id="addJuriBtn" style="margin-top:0.5rem">TAMBAH JURI</button>
                 <div id="juriList" class="card-list"></div>
             </div>
-            <div style="flex:2; min-width: 300px;">
-                <h3>👥 PESERTA</h3>
+            <div style="flex:2">
+                <h3>PESERTA</h3>
                 <div class="grid-2">
-                    <div class="form-group"><label>NAMA PESERTA</label><input type="text" id="pesertaName" placeholder="NAMA TIM"></div>
-                    <div class="form-group"><label>CHANNEL</label><select id="channelSelect"><option value="SS">SS</option><option value="QCC">QCC</option><option value="QCP">QCP</option></select></div>
+                    <input type="text" id="pesertaName" placeholder="Nama Peserta">
+                    <select id="channelSelect">
+                        <option value="SS">SS</option>
+                        <option value="QCC">QCC</option>
+                        <option value="QCP">QCP</option>
+                    </select>
                 </div>
-                <div class="form-group"><label>JUDUL CONIM</label><input type="text" id="judulConim" placeholder="JUDUL LENGKAP"></div>
-                <button class="btn-primary" id="addPesertaBtn">+ TAMBAH PESERTA</button>
+                <input type="text" id="judulConim" placeholder="Judul Conim" style="margin-top:0.5rem">
+                <button class="btn-primary" id="addPesertaBtn" style="margin-top:0.5rem">TAMBAH PESERTA</button>
                 <div id="pesertaList" class="card-list"></div>
             </div>
         </div>
-        <hr>
-        <h3>📋 KRITERIA PENILAIAN</h3>
+        <hr style="margin: 1.5rem 0">
+        <h3>KRITERIA PENILAIAN</h3>
         <div class="grid-2">
-            <div class="form-group"><label>KODE</label><input type="text" id="kriteriaKode" placeholder="1A"></div>
-            <div class="form-group"><label>NAMA KRITERIA</label><input type="text" id="kriteriaName" placeholder="NAMA"></div>
+            <input type="text" id="kriteriaKode" placeholder="Kode (1A,2B)">
+            <input type="text" id="kriteriaName" placeholder="Nama Kriteria">
         </div>
-        <div class="form-group"><label>DESKRIPSI KURANG (1-4)</label><textarea id="descKurang" rows="2"></textarea></div>
-        <div class="form-group"><label>DESKRIPSI CUKUP (5-6)</label><textarea id="descCukup" rows="2"></textarea></div>
-        <div class="form-group"><label>DESKRIPSI BAIK (7-8)</label><textarea id="descBaik" rows="2"></textarea></div>
-        <div class="form-group"><label>DESKRIPSI EXCELLENT (9-10)</label><textarea id="descExcellent" rows="2"></textarea></div>
+        <textarea id="descKurang" rows="2" placeholder="Deskripsi KURANG (skor 1-4)"></textarea>
+        <textarea id="descCukup" rows="2" placeholder="Deskripsi CUKUP (skor 5-6)"></textarea>
+        <textarea id="descBaik" rows="2" placeholder="Deskripsi BAIK (skor 7-8)"></textarea>
+        <textarea id="descExcellent" rows="2" placeholder="Deskripsi EXCELLENT (skor 9-10)"></textarea>
         <div class="grid-2">
-            <div class="form-group"><label>BOBOT MAX</label><input type="number" id="kriteriaBobot" value="10"></div>
-            <div class="form-group"><label>URUTAN</label><input type="number" id="kriteriaUrutan" value="1"></div>
+            <input type="number" id="kriteriaBobot" placeholder="Bobot Max" value="10">
+            <input type="number" id="kriteriaUrutan" placeholder="Urutan" value="1">
         </div>
-        <button class="btn-primary" id="addKriteriaBtn">➕ TAMBAH KRITERIA</button>
-        <button class="btn-primary" id="resetDefaultKriteriaBtn" style="background:#64748b;">🔄 RESET DEFAULT</button>
+        <button class="btn-primary" id="addKriteriaBtn">TAMBAH KRITERIA</button>
+        <button class="btn-primary" id="resetDefaultBtn" style="background:#64748b; margin-left:0.5rem">RESET DEFAULT</button>
         <div id="kriteriaListMgmt" class="card-list"></div>
     </div>
 
-    <!-- PANEL FORM INPUT DENGAN RATING BUTTON -->
+    <!-- FORM INPUT PANEL -->
     <div id="formPanel" class="panel active-panel">
-        <h2>📝 FORM PENILAIAN PESERTA</h2>
+        <h2>📝 FORM PENILAIAN</h2>
         <div id="formAlert"></div>
         <div class="form-group">
             <label>PILIH PESERTA</label>
             <select id="dropdownPeserta"></select>
         </div>
         <div class="form-group">
-            <label>PILIH JURI (OPSIONAL)</label>
+            <label>PILIH JURI</label>
             <select id="dropdownJuri"><option value="">TANPA JURI</option></select>
         </div>
         <div id="dynamicKriteriaNilai"></div>
-        <button class="btn-primary" id="submitPenilaianBtn">✅ SUBMIT PENILAIAN</button>
+        <button class="btn-primary" id="submitPenilaianBtn" style="margin-top:1rem">✅ SUBMIT PENILAIAN</button>
         <div id="hasilPenilaian" style="margin-top: 2rem;"></div>
     </div>
 
+    <!-- DASHBOARD PANEL -->
     <div id="dashboardPanel" class="panel">
         <h2>📊 DASHBOARD PENILAIAN</h2>
-        <p style="color:gray; text-transform:uppercase;">🚧 FITUR DASHBOARD MENYUSUL</p>
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <h4>📈 GRAFIK TOTAL SKOR PESERTA</h4>
+                <canvas id="scoreChart" width="400" height="300"></canvas>
+            </div>
+            <div class="stat-card">
+                <h4>🏆 SCORE CARD PESERTA</h4>
+                <div id="scoreCardList"></div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-    // DEFAULT KRITERIA DENGAN RUBRIK
+    // DEFAULT KRITERIA PDCARP DENGAN DESKRIPSI LENGKAP
     const DEFAULT_KRITERIA = [
         { id:1001, kode:"1A", nama:"IDENTIFIKASI MASALAH & PENENTUAN TEMA", 
           descKurang:"TIDAK ADA IDENTIFIKASI YANG JELAS DITINJAU DARI ASPEK MUTU, TEMA TIDAK SESUAI DENGAN KEBIJAKAN PERUSAHAAN",
-          descCukup:"PRIORITAS DITINJAU DARI SEBAGIAN ASPEK MUTU, DATA TIDAK LENGKAP DAN ATAU KURANG AKURAT, TEMA KURANG SESUAI",
-          descBaik:"PRIORITAS DITINJAU DARI SEBAGIAN ASPEK MUTU, DATA LENGKAP DAN AKURAT, TEMA SESUAI",
-          descExcellent:"PRIORITAS DITINJAU DARI SEMUA ASPEK MUTU, DATA LENGKAP DAN AKURAT, TEMA SESUAI", bobot:10, urutan:1 },
+          descCukup:"PRIORITAS DITINJAU DARI SEBAGIAN ASPEK MUTU, DATA TIDAK LENGKAP ATAU KURANG AKURAT, TEMA KURANG SESUAI DENGAN KEBIJAKAN PERUSAHAAN",
+          descBaik:"PRIORITAS DITINJAU DARI SEBAGIAN ASPEK MUTU, DATA LENGKAP DAN AKURAT, TEMA SESUAI DENGAN KEBIJAKAN PERUSAHAAN",
+          descExcellent:"PRIORITAS DITINJAU DARI SEMUA ASPEK MUTU, DATA LENGKAP DAN AKURAT, TEMA SESUAI DENGAN KEBIJAKAN PERUSAHAAN", bobot:10, urutan:1 },
         { id:1002, kode:"2A", nama:"ANALISIS SEBAB AKIBAT", 
           descKurang:"KORELASI TIDAK LOGIS DAN TIDAK LENGKAP",
           descCukup:"SEBAGIAN KORELASI TIDAK LOGIS DAN TIDAK LENGKAP",
@@ -372,45 +438,46 @@
           descExcellent:"KORELASI LOGIS & LENGKAP", bobot:10, urutan:2 },
         { id:1003, kode:"2C", nama:"PERENCANAAN PERBAIKAN (5W+2H)", 
           descKurang:"PERENCANAAN TIDAK SISTEMATIS",
-          descCukup:"MELIPUTI ASPEK 5W+2H TAPI TIDAK JELAS",
-          descBaik:"MELIPUTI ASPEK 5W+2H SECARA GLOBAL, JELAS & BENAR",
-          descExcellent:"MELIPUTI ASPEK 5W+2H SECARA DETAIL, JELAS & BENAR", bobot:10, urutan:3 },
+          descCukup:"MELIPUTI ASPEK 5W + 2H TAPI TIDAK JELAS ATAU TIDAK BENAR",
+          descBaik:"MELIPUTI ASPEK 5W + 2H SECARA GLOBAL, JELAS & BENAR",
+          descExcellent:"MELIPUTI ASPEK 5W + 2H SECARA DETAIL, JELAS & BENAR", bobot:10, urutan:3 },
         { id:1004, kode:"2D", nama:"PEMANFAATAN PERANAN PIHAK TERKAIT", 
           descKurang:"KURANG DIDUKUNG PIHAK TERKAIT",
           descCukup:"DIDUKUNG BEBERAPA PIHAK TERKAIT",
           descBaik:"DIDUKUNG SEMUA PIHAK TERKAIT SECARA AKTIF MAUPUN PASIF",
-          descExcellent:"DIDUKUNG SEMUA PIHAK TERKAIT SECARA AKTIF DAN EFEKTIF", bobot:10, urutan:4 },
+          descExcellent:"DIDUKUNG SEMUA PIHAK YANG TERKAIT SECARA AKTIF DAN EFEKTIF", bobot:10, urutan:4 },
         { id:1005, kode:"3B", nama:"KATEGORI SOLUSI", 
           descKurang:"MENIRU DARI YANG SUDAH ADA",
-          descCukup:"MENINGKATKAN KINERJA PRODUK/SISTEM YANG ADA",
-          descBaik:"INOVASI DARI PRODUK/SISTEM YANG ADA (LINGKUP NASIONAL)",
-          descExcellent:"MENCIPTAKAN PRODUK/SISTEM BARU (INVENSI INTERNATIONAL) & DAPAT DIPATENKAN", bobot:10, urutan:5 },
+          descCukup:"MENINGKATKAN KINERJA PRODUK DAN ATAU SISTEM YANG ADA",
+          descBaik:"INOVASI DARI PRODUK DAN ATAU SISTEM YANG ADA (LINGKUP NASIONAL)",
+          descExcellent:"MENCIPTAKAN PRODUK DAN ATAU SISTEM YANG BENAR-BENAR BARU (INVENSI LINGKUP INTERNATIONAL) DAN DAPAT DIPATENKAN", bobot:10, urutan:5 },
         { id:1006, kode:"4B", nama:"PEMANTAUAN, PENERAPAN, PERBAIKAN", 
-          descKurang:"PEMANTAUAN SPONTAN & TAK TERDOKUMENTASI",
-          descCukup:"PEMANTAUAN SISTEMATIS TANPA DOKUMENTASI MEMADAI",
-          descBaik:"PEMANTAUAN DISERTAI DOKUMENTASI PADA PROSES UTAMA",
-          descExcellent:"PEMANTAUAN EFEKTIF DISERTAI DOKUMENTASI LENGKAP", bobot:10, urutan:6 },
+          descKurang:"PEMANTAUAN DILAKUKAN SECARA SPONTAN DAN TAK TERDOKUMENTASI",
+          descCukup:"PEMANTAUAN DILAKUKAN SECARA SISTEMATIS TANPA DOKUMENTASI YANG MEMADAI",
+          descBaik:"PEMANTAUAN DILAKUKAN DISERTAI DOKUMENTASI PADA PROSES UTAMA",
+          descExcellent:"PEMANTAUAN DILAKUKAN DENGAN EFEKTIF DISERTAI DOKUMENTASI YANG LENGKAP", bobot:10, urutan:6 },
         { id:1007, kode:"6A", nama:"EVALUASI HASIL (KEUNTUNGAN QCDSMPE)", 
           descKurang:"KEUNTUNGAN DIBAWAH 2 ASPEK QCDSMPE",
-          descCukup:"KEUNTUNGAN 2-3 ASPEK QCDSMPE",
-          descBaik:"KEUNTUNGAN 4-5 ASPEK QCDSMPE",
-          descExcellent:"KEUNTUNGAN 6-7 ASPEK QCDSMPE", bobot:10, urutan:7 },
+          descCukup:"KEUNTUNGAN MENCANGKUP 2-3 ASPEK QCDSMPE",
+          descBaik:"KEUNTUNGAN MENCANGKUP 4-5 ASPEK QCDSMPE",
+          descExcellent:"KEUNTUNGAN MENCANGKUP 6 -7 ASPEK QCDSMPE", bobot:10, urutan:7 },
         { id:1008, kode:"8A", nama:"STANDARDISASI", 
           descKurang:"STANDAR BARU BELUM DISAHKAN",
-          descCukup:"STANDAR BARU DISAHKAN TAPI TIDAK LENGKAP & TIDAK TERJAMIN",
-          descBaik:"STANDAR BARU LENGKAP DISAHKAN TAPI TIDAK TERJAMIN",
-          descExcellent:"STANDAR BARU LENGKAP DISAHKAN & TERJAMIN", bobot:10, urutan:8 },
+          descCukup:"STANDAR BARU DI SAHKAN TAPI TIDAK LENGKAP DAN TIDAK TERJAMIN PENERAPANNYA",
+          descBaik:"STANDAR BARU LENGKAP TELAH DI SAHKAN TAPI TIDAK TERJAMIN PENERAPANNYA",
+          descExcellent:"STANDAR BARU LENGKAP TELAH DI SAHKAN DAN TERJAMIN PENERAPANNYA", bobot:10, urutan:8 },
         { id:1009, kode:"10A", nama:"KEJELASAN PRESENTASI & UNSUR HIBURAN", 
           descKurang:"PRESENTASI TIDAK INFORMATIF",
-          descCukup:"PRESENTASI KURANG JELAS/KURANG INFORMATIF",
-          descBaik:"MENGGUNAKAN ANIMASI/PERAGA TAPI KURANG MEMPERJELAS",
-          descExcellent:"MENGGUNAKAN ANIMASI/PERAGA TEPAT & MEMPERJELAS KASUS", bobot:10, urutan:9 }
+          descCukup:"PRESENTASI KURANG JELAS / KURANG INFORMATIF",
+          descBaik:"MENGGUNAKAN ANIMASI / PERAGA TAPI KURANG MEMPERJELAS KASUS YANG DIHADAPI",
+          descExcellent:"MENGGUNAKAN ANIMASI/ PERAGA YANG TEPAT DAN MEMPERJELAS KASUS YANG DIHADAPI", bobot:10, urutan:9 }
     ];
 
     let juriData = JSON.parse(localStorage.getItem('juriData')) || [];
     let pesertaData = JSON.parse(localStorage.getItem('pesertaData')) || [];
     let kriteriaData = JSON.parse(localStorage.getItem('kriteriaData')) || [];
     let penilaianData = JSON.parse(localStorage.getItem('penilaianData')) || [];
+    let nilaiKriteria = {};
 
     if(kriteriaData.length === 0) { kriteriaData = JSON.parse(JSON.stringify(DEFAULT_KRITERIA)); saveAll(); }
 
@@ -434,107 +501,98 @@
         if(!container) return;
         container.innerHTML = pesertaData.length ? pesertaData.map(p => `<div class="card-item"><div><strong>${p.nama}</strong> (${p.channel})<br><small>${p.judulConim}</small></div><button class="btn-danger" onclick="hapusPeserta(${p.id})">HAPUS</button></div>`).join('') : '<div class="card-item">BELUM ADA PESERTA</div>';
         const dp = document.getElementById('dropdownPeserta');
-        if(dp) dp.innerHTML = '<option value="">-- PILIH PESERTA --</option>' + pesertaData.map(p => `<option value="${p.id}">${p.nama} (${p.channel}) - ${p.judulConim.substring(0,40)}</option>`).join('');
+        if(dp) dp.innerHTML = '<option value="">-- PILIH PESERTA --</option>' + pesertaData.map(p => `<option value="${p.id}">${p.nama} (${p.channel})</option>`).join('');
+        renderDashboard();
     }
 
-    // RENDER FORM DENGAN RATING BUTTON
+    function renderKriteriaMgmt() {
+        const container = document.getElementById('kriteriaListMgmt');
+        if(!container) return;
+        if(kriteriaData.length === 0) { container.innerHTML = '<div class="card-item">BELUM ADA KRITERIA</div>'; return; }
+        container.innerHTML = kriteriaData.map(k => `<div class="card-item" style="flex-direction:column; align-items:flex-start;"><div><strong>[${k.kode}] ${k.nama}</strong> (MAX:${k.bobot}) <button class="btn-warning" onclick="editKriteria(${k.id})">EDIT</button><button class="btn-danger" onclick="hapusKriteria(${k.id})">HAPUS</button></div><div style="font-size:0.7rem; color:#555; margin-top:0.3rem;">K: ${(k.descKurang||'-').substring(0,60)}...</div></div>`).join('');
+    }
+
+    window.setRating = function(kriteriaId, score) {
+        nilaiKriteria[kriteriaId] = score;
+        for(let i = 1; i <= 10; i++) {
+            const circle = document.getElementById(`circle_${kriteriaId}_${i}`);
+            if(circle) {
+                if(i <= score) circle.classList.add('active');
+                else circle.classList.remove('active');
+            }
+        }
+        const valueText = document.getElementById(`selected_value_${kriteriaId}`);
+        if(valueText) valueText.innerHTML = `✓ NILAI TERPILIH: ${score}`;
+    };
+
     function renderFormKriteriaNilai() {
         const container = document.getElementById('dynamicKriteriaNilai');
         if(!container) return;
         if(kriteriaData.length === 0) { container.innerHTML = '<div class="alert alert-error">BELUM ADA KRITERIA</div>'; return; }
         const sorted = [...kriteriaData].sort((a,b) => (a.urutan||999)-(b.urutan||999));
-        container.innerHTML = sorted.map(k => `
-            <div class="kriteria-card" data-kriteriaid="${k.id}">
-                <div class="kriteria-header">
-                    <span>[${k.kode || ''}] ${k.nama.toUpperCase()} (MAX: ${k.bobot})</span>
-                </div>
-                <div class="rating-buttons">
-                    <div class="rating-btn kurang" data-level="kurang" data-value="2.5" onclick="setNilaiKriteria(${k.id}, 2.5, 'kurang')">
-                        <div class="rating-level">🔴 KURANG</div>
-                        <div class="rating-desc">${(k.descKurang || '-').substring(0,80)}${(k.descKurang||'').length>80?'...':''}</div>
-                        <div class="rating-score">SKOR: 1-4</div>
+        
+        container.innerHTML = sorted.map(k => {
+            let circles = '';
+            for(let i = 1; i <= k.bobot; i++) {
+                circles += `<div class="circle" id="circle_${k.id}_${i}" data-score="${i}" onclick="setRating(${k.id}, ${i})">${i}</div>`;
+            }
+            return `
+                <div class="kriteria-card">
+                    <div class="kriteria-header">
+                        [${k.kode || ''}] ${k.nama.toUpperCase()} (MAX: ${k.bobot})
                     </div>
-                    <div class="rating-btn cukup" data-level="cukup" data-value="5.5" onclick="setNilaiKriteria(${k.id}, 5.5, 'cukup')">
-                        <div class="rating-level">🟠 CUKUP</div>
-                        <div class="rating-desc">${(k.descCukup || '-').substring(0,80)}${(k.descCukup||'').length>80?'...':''}</div>
-                        <div class="rating-score">SKOR: 5-6</div>
+                    <div class="rubrik-grid">
+                        <div class="rubrik-item rubrik-kurang"><div class="rubrik-title">🔴 KURANG (1-4)</div><div class="rubrik-desc">${k.descKurang || '-'}</div></div>
+                        <div class="rubrik-item rubrik-cukup"><div class="rubrik-title">🟠 CUKUP (5-6)</div><div class="rubrik-desc">${k.descCukup || '-'}</div></div>
+                        <div class="rubrik-item rubrik-baik"><div class="rubrik-title">🔵 BAIK (7-8)</div><div class="rubrik-desc">${k.descBaik || '-'}</div></div>
+                        <div class="rubrik-item rubrik-excellent"><div class="rubrik-title">🟢 EXCELLENT (9-10)</div><div class="rubrik-desc">${k.descExcellent || '-'}</div></div>
                     </div>
-                    <div class="rating-btn baik" data-level="baik" data-value="7.5" onclick="setNilaiKriteria(${k.id}, 7.5, 'baik')">
-                        <div class="rating-level">🔵 BAIK</div>
-                        <div class="rating-desc">${(k.descBaik || '-').substring(0,80)}${(k.descBaik||'').length>80?'...':''}</div>
-                        <div class="rating-score">SKOR: 7-8</div>
-                    </div>
-                    <div class="rating-btn excellent" data-level="excellent" data-value="9.5" onclick="setNilaiKriteria(${k.id}, 9.5, 'excellent')">
-                        <div class="rating-level">🟢 EXCELLENT</div>
-                        <div class="rating-desc">${(k.descExcellent || '-').substring(0,80)}${(k.descExcellent||'').length>80?'...':''}</div>
-                        <div class="rating-score">SKOR: 9-10</div>
+                    <div class="rating-wrapper">
+                        <div class="rating-value">⭐ KLIK LINGKARAN UNTUK MEMBERI NILAI ⭐</div>
+                        <div class="rating-circles">${circles}</div>
+                        <div class="rating-value" id="selected_value_${k.id}" style="margin-top: 0.5rem; color: #3b82f6;">BELUM DIPILIH</div>
                     </div>
                 </div>
-                <div class="nilai-input-wrapper">
-                    <label>ATAU INPUT MANUAL:</label>
-                    <input type="number" class="nilai-manual" id="manual_${k.id}" data-kriteriaid="${k.id}" placeholder="0-${k.bobot}" min="0" max="${k.bobot}" step="0.5" value="" onchange="setNilaiManual(${k.id}, this.value)">
-                    <span style="font-size:0.7rem;">/ ${k.bobot}</span>
-                </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     }
 
-    // Fungsi global untuk set nilai dari tombol rating
-    window.setNilaiKriteria = function(kriteriaId, nilai, level) {
-        const inputManual = document.getElementById(`manual_${kriteriaId}`);
-        if(inputManual) {
-            inputManual.value = nilai;
-            // Trigger change event biar konsisten
-            const event = new Event('change', { bubbles: true });
-            inputManual.dispatchEvent(event);
-        }
-        // Hilangkan active class dari semua button di card ini
-        const card = document.querySelector(`.kriteria-card[data-kriteriaid="${kriteriaId}"]`);
-        if(card) {
-            card.querySelectorAll('.rating-btn').forEach(btn => btn.classList.remove('active'));
-            const activeBtn = card.querySelector(`.rating-btn.${level}`);
-            if(activeBtn) activeBtn.classList.add('active');
-        }
-        showAlert(`NILAI ${nilai} UNTUK KRITERIA ID ${kriteriaId}`, 'success');
-    };
-
-    window.setNilaiManual = function(kriteriaId, val) {
-        const numVal = parseFloat(val);
-        const kriteria = kriteriaData.find(k => k.id === kriteriaId);
-        if(kriteria && !isNaN(numVal) && numVal >= 0 && numVal <= kriteria.bobot) {
-            // Update juga highlight tombol berdasarkan range nilai
-            const card = document.querySelector(`.kriteria-card[data-kriteriaid="${kriteriaId}"]`);
-            if(card) {
-                card.querySelectorAll('.rating-btn').forEach(btn => btn.classList.remove('active'));
-                if(numVal <= 4) card.querySelector('.rating-btn.kurang')?.classList.add('active');
-                else if(numVal <= 6) card.querySelector('.rating-btn.cukup')?.classList.add('active');
-                else if(numVal <= 8) card.querySelector('.rating-btn.baik')?.classList.add('active');
-                else if(numVal <= 10) card.querySelector('.rating-btn.excellent')?.classList.add('active');
-            }
-        }
-    };
+    function resetFormPenilaian() {
+        nilaiKriteria = {};
+        renderFormKriteriaNilai();
+    }
 
     function submitPenilaian() {
         const pesertaId = document.getElementById('dropdownPeserta').value;
         if(!pesertaId) { showAlert('PILIH PESERTA DULU!', 'error'); return; }
         const juriId = document.getElementById('dropdownJuri').value;
         let nilaiPerKriteria = [];
-        let valid = true;
-        
+        let semuaTerisi = true;
+
         kriteriaData.forEach(k => {
-            const inputField = document.getElementById(`manual_${k.id}`);
-            let nilai = inputField ? parseFloat(inputField.value) : 0;
-            if(isNaN(nilai)) nilai = 0;
-            if(nilai < 0 || nilai > k.bobot) valid = false;
+            const nilai = nilaiKriteria[k.id] || 0;
+            if(nilai === 0) semuaTerisi = false;
             nilaiPerKriteria.push({ kriteriaId: k.id, nilai: nilai });
         });
-        
-        if(!valid) { showAlert('ADA NILAI MELEBIHI BOBOT!', 'error'); return; }
-        
-        penilaianData.push({ id: Date.now(), pesertaId: parseInt(pesertaId), juriId: juriId ? parseInt(juriId) : null, tanggal: new Date().toLocaleString(), nilaiPerKriteria });
+
+        if(!semuaTerisi) { showAlert('SEMUA KRITERIA HARUS DIISI!', 'error'); return; }
+
+        penilaianData.push({
+            id: Date.now(),
+            pesertaId: parseInt(pesertaId),
+            juriId: juriId ? parseInt(juriId) : null,
+            tanggal: new Date().toLocaleString(),
+            nilaiPerKriteria: nilaiPerKriteria
+        });
         saveAll();
         showAlert('PENILAIAN BERHASIL DISIMPAN!', 'success');
+        
+        // Reset form setelah submit
+        resetFormPenilaian();
+        
+        // Tampilkan hasil penilaian untuk peserta yang sama
         tampilkanHasilPenilaian(parseInt(pesertaId));
+        renderDashboard();
     }
 
     function showAlert(msg, type) {
@@ -548,59 +606,184 @@
         const peserta = pesertaData.find(p => p.id === pesertaId);
         if(!peserta) return;
         const data = penilaianData.filter(p => p.pesertaId === pesertaId);
-        if(data.length===0) { container.innerHTML = `<div class="card-item">BELUM ADA PENILAIAN</div>`; return; }
-        let html = `<h3>RIWAYAT: ${peserta.nama} (${peserta.channel})</h3>`;
-        data.forEach((pen,idx) => {
-            let total=0, detail='<ul>';
+        if(data.length === 0) { container.innerHTML = `<div class="card-item">BELUM ADA PENILAIAN</div>`; return; }
+        let html = `<h3 style="font-size:1rem;">RIWAYAT: ${peserta.nama} (${peserta.channel})</h3>`;
+        data.forEach((pen, idx) => {
+            let total = 0, detail = '<ul style="margin-left:1rem; font-size:0.8rem;">';
             pen.nilaiPerKriteria.forEach(nk => {
-                const k = kriteriaData.find(kr=>kr.id===nk.kriteriaId);
-                detail += `<li>${k?`[${k.kode}] ${k.nama}`:`ID:${nk.kriteriaId}`}: ${nk.nilai} / ${k?.bobot||10}</li>`;
+                const k = kriteriaData.find(kr => kr.id === nk.kriteriaId);
+                detail += `<li>${k ? `[${k.kode}] ${k.nama}` : `ID:${nk.kriteriaId}`}: ${nk.nilai} / ${k?.bobot||10}</li>`;
                 total += nk.nilai;
             });
-            detail += `</ul><strong>TOTAL: ${total}</strong>`;
-            html += `<div class="card-item" style="flex-direction:column;"><div>PENILAIAN #${idx+1} (${pen.tanggal})</div>${detail}<button class="btn-danger" onclick="hapusPenilaian(${pen.id})">HAPUS</button></div>`;
+            const juri = pen.juriId ? juriData.find(j => j.id === pen.juriId) : null;
+            detail += `</ul><strong>TOTAL: ${total}</strong><br><small>JURI: ${juri ? juri.nama : 'TANPA JURI'} | TANGGAL: ${pen.tanggal}</small>`;
+            html += `<div class="card-item" style="flex-direction:column; align-items:flex-start;">PENILAIAN #${idx+1}<br>${detail}</div>`;
         });
         container.innerHTML = html;
     }
 
-    window.hapusJuri = function(id) { juriData = juriData.filter(j=>j.id!==id); saveAll(); renderJuri(); };
-    window.hapusPeserta = function(id) { pesertaData = pesertaData.filter(p=>p.id!==id); penilaianData = penilaianData.filter(p=>p.pesertaId!==id); saveAll(); renderPeserta(); document.getElementById('hasilPenilaian').innerHTML=''; };
-    window.hapusKriteria = function(id) { kriteriaData = kriteriaData.filter(k=>k.id!==id); saveAll(); renderKriteriaMgmt(); renderFormKriteriaNilai(); };
-    window.hapusPenilaian = function(id) { penilaianData = penilaianData.filter(p=>p.id!==id); saveAll(); const pid = document.getElementById('dropdownPeserta').value; if(pid) tampilkanHasilPenilaian(parseInt(pid)); else document.getElementById('hasilPenilaian').innerHTML=''; showAlert('PENILAIAN DIHAPUS','success'); };
-
-    function renderKriteriaMgmt() {
-        const container = document.getElementById('kriteriaListMgmt');
-        if(!container) return;
-        if(kriteriaData.length===0) { container.innerHTML='<div class="card-item">BELUM ADA KRITERIA</div>'; return; }
-        container.innerHTML = kriteriaData.map(k => `<div class="card-item" style="flex-direction:column;"><div><strong>[${k.kode}] ${k.nama}</strong> (MAX:${k.bobot}) <button class="btn-warning" onclick="editKriteria(${k.id})">EDIT</button><button class="btn-danger" onclick="hapusKriteria(${k.id})">HAPUS</button></div><div style="font-size:0.7rem;">K:${(k.descKurang||'-').substring(0,50)}... | E:${(k.descExcellent||'-').substring(0,50)}...</div></div>`).join('');
+    function renderDashboard() {
+        if(pesertaData.length === 0) {
+            document.getElementById('scoreCardList').innerHTML = '<div class="card-item">BELUM ADA PESERTA</div>';
+            return;
+        }
+        
+        // Hitung total skor per peserta (rata-rata dari semua penilaian)
+        const pesertaScores = pesertaData.map(p => {
+            const penilaianPeserta = penilaianData.filter(pen => pen.pesertaId === p.id);
+            let totalSemuaNilai = 0;
+            let jumlahPenilaian = penilaianPeserta.length;
+            penilaianPeserta.forEach(pen => {
+                const totalNilai = pen.nilaiPerKriteria.reduce((sum, nk) => sum + nk.nilai, 0);
+                totalSemuaNilai += totalNilai;
+            });
+            const avgScore = jumlahPenilaian > 0 ? totalSemuaNilai / jumlahPenilaian : 0;
+            // Dapatkan daftar juri yang sudah menilai
+            const juriIds = [...new Set(penilaianPeserta.map(pen => pen.juriId).filter(id => id !== null))];
+            const juriNames = juriIds.map(id => {
+                const juri = juriData.find(j => j.id === id);
+                return juri ? juri.nama : 'Unknown';
+            });
+            return {
+                id: p.id,
+                nama: p.nama,
+                channel: p.channel,
+                avgScore: avgScore,
+                totalPenilaian: jumlahPenilaian,
+                juriList: juriNames
+            };
+        });
+        
+        // Score Card
+        const scoreCardHtml = pesertaScores.map(ps => `
+            <div class="peserta-score-card">
+                <div class="peserta-name">${ps.nama} (${ps.channel})</div>
+                <div><span class="score-badge">⭐ RATA-RATA: ${ps.avgScore.toFixed(1)}</span> <span class="score-badge" style="background:#64748b">📊 TOTAL PENILAIAN: ${ps.totalPenilaian}</span></div>
+                <div class="juri-list">👨‍⚖️ JURI YANG MENILAI: ${ps.juriList.length > 0 ? ps.juriList.join(', ') : 'BELUM ADA'}</div>
+            </div>
+        `).join('');
+        document.getElementById('scoreCardList').innerHTML = scoreCardHtml || '<div class="card-item">BELUM ADA PENILAIAN</div>';
+        
+        // Chart
+        const ctx = document.getElementById('scoreChart').getContext('2d');
+        if(window.scoreChartInstance) window.scoreChartInstance.destroy();
+        window.scoreChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: pesertaScores.map(ps => ps.nama),
+                datasets: [{
+                    label: 'RATA-RATA SKOR',
+                    data: pesertaScores.map(ps => ps.avgScore),
+                    backgroundColor: '#3b82f6',
+                    borderRadius: 8,
+                    borderColor: '#2563eb',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: { callbacks: { label: (ctx) => `SKOR: ${ctx.raw.toFixed(1)}` } }
+                },
+                scales: {
+                    y: { beginAtZero: true, title: { display: true, text: 'SKOR' } },
+                    x: { title: { display: true, text: 'PESERTA' } }
+                }
+            }
+        });
     }
 
+    window.hapusJuri = function(id) { juriData = juriData.filter(j=>j.id!==id); saveAll(); renderJuri(); renderDashboard(); };
+    window.hapusPeserta = function(id) { 
+        pesertaData = pesertaData.filter(p=>p.id!==id); 
+        penilaianData = penilaianData.filter(p=>p.pesertaId!==id); 
+        saveAll(); 
+        renderPeserta(); 
+        document.getElementById('hasilPenilaian').innerHTML=''; 
+        renderDashboard();
+    };
+    window.hapusKriteria = function(id) { kriteriaData = kriteriaData.filter(k=>k.id!==id); saveAll(); renderKriteriaMgmt(); renderFormKriteriaNilai(); renderDashboard(); };
+    
     window.editKriteria = function(id) {
         const k = kriteriaData.find(k=>k.id===id);
         if(!k) return;
-        k.nama = prompt("NAMA:", k.nama)?.toUpperCase() || k.nama;
-        k.bobot = parseInt(prompt("BOBOT:", k.bobot)) || k.bobot;
+        k.nama = prompt("NAMA KRITERIA:", k.nama)?.toUpperCase() || k.nama;
+        k.bobot = parseInt(prompt("BOBOT MAKSIMAL:", k.bobot)) || k.bobot;
         k.kode = prompt("KODE:", k.kode)?.toUpperCase() || k.kode;
-        k.descKurang = prompt("DESKRIPSI KURANG:", k.descKurang) || k.descKurang;
-        k.descCukup = prompt("DESKRIPSI CUKUP:", k.descCukup) || k.descCukup;
-        k.descBaik = prompt("DESKRIPSI BAIK:", k.descBaik) || k.descBaik;
-        k.descExcellent = prompt("DESKRIPSI EXCELLENT:", k.descExcellent) || k.descExcellent;
-        saveAll(); renderKriteriaMgmt(); renderFormKriteriaNilai();
+        k.descKurang = prompt("DESKRIPSI KURANG (1-4):", k.descKurang) || k.descKurang;
+        k.descCukup = prompt("DESKRIPSI CUKUP (5-6):", k.descCukup) || k.descCukup;
+        k.descBaik = prompt("DESKRIPSI BAIK (7-8):", k.descBaik) || k.descBaik;
+        k.descExcellent = prompt("DESKRIPSI EXCELLENT (9-10):", k.descExcellent) || k.descExcellent;
+        saveAll(); renderKriteriaMgmt(); renderFormKriteriaNilai(); renderDashboard();
     };
 
-    function resetDefault() { if(confirm("RESET KE DEFAULT?")){ kriteriaData=JSON.parse(JSON.stringify(DEFAULT_KRITERIA)); saveAll(); renderKriteriaMgmt(); renderFormKriteriaNilai(); showAlert("RESET DEFAULT BERHASIL","success"); } }
+    function resetDefault() {
+        if(confirm("RESET KE DEFAULT KRITERIA PDCARP?")) {
+            kriteriaData = JSON.parse(JSON.stringify(DEFAULT_KRITERIA));
+            saveAll();
+            renderKriteriaMgmt();
+            renderFormKriteriaNilai();
+            showAlert("RESET DEFAULT BERHASIL", "success");
+            renderDashboard();
+        }
+    }
 
-    document.getElementById('addJuriBtn')?.addEventListener('click',()=>{ let n=document.getElementById('juriName').value.trim(); if(n){ juriData.push({id:Date.now(),nama:n.toUpperCase()}); saveAll(); renderJuri(); document.getElementById('juriName').value=''; } });
-    document.getElementById('addPesertaBtn')?.addEventListener('click',()=>{ let n=document.getElementById('pesertaName').value.trim(); let c=document.getElementById('channelSelect').value; let j=document.getElementById('judulConim').value.trim(); if(n&&j){ pesertaData.push({id:Date.now(),nama:n.toUpperCase(),channel:c,judulConim:j.toUpperCase()}); saveAll(); renderPeserta(); document.getElementById('pesertaName').value=''; document.getElementById('judulConim').value=''; } });
-    document.getElementById('addKriteriaBtn')?.addEventListener('click',()=>{ let kode=document.getElementById('kriteriaKode').value.trim().toUpperCase(); let nama=document.getElementById('kriteriaName').value.trim().toUpperCase(); if(!nama) return alert("NAMA HARUS DIISI"); kriteriaData.push({id:Date.now(),kode,nama,descKurang:document.getElementById('descKurang').value,descCukup:document.getElementById('descCukup').value,descBaik:document.getElementById('descBaik').value,descExcellent:document.getElementById('descExcellent').value,bobot:parseInt(document.getElementById('kriteriaBobot').value)||10,urutan:parseInt(document.getElementById('kriteriaUrutan').value)||kriteriaData.length+1}); saveAll(); renderKriteriaMgmt(); renderFormKriteriaNilai(); });
-    document.getElementById('resetDefaultKriteriaBtn')?.addEventListener('click',resetDefault);
-    document.getElementById('submitPenilaianBtn')?.addEventListener('click',submitPenilaian);
-    document.getElementById('dropdownPeserta')?.addEventListener('change',(e)=>{ if(e.target.value) tampilkanHasilPenilaian(parseInt(e.target.value)); else document.getElementById('hasilPenilaian').innerHTML=''; });
+    // EVENT LISTENERS
+    document.getElementById('addJuriBtn')?.addEventListener('click', () => {
+        let n = document.getElementById('juriName').value.trim();
+        if(n) { juriData.push({id:Date.now(), nama:n.toUpperCase()}); saveAll(); renderJuri(); renderDashboard(); document.getElementById('juriName').value = ''; }
+    });
+    document.getElementById('addPesertaBtn')?.addEventListener('click', () => {
+        let n = document.getElementById('pesertaName').value.trim();
+        let c = document.getElementById('channelSelect').value;
+        let j = document.getElementById('judulConim').value.trim();
+        if(n && j) { pesertaData.push({id:Date.now(), nama:n.toUpperCase(), channel:c, judulConim:j.toUpperCase()}); saveAll(); renderPeserta(); document.getElementById('pesertaName').value=''; document.getElementById('judulConim').value=''; renderDashboard(); }
+    });
+    document.getElementById('addKriteriaBtn')?.addEventListener('click', () => {
+        let nama = document.getElementById('kriteriaName').value.trim().toUpperCase();
+        if(!nama) return alert('NAMA KRITERIA HARUS DIISI');
+        kriteriaData.push({
+            id: Date.now(),
+            kode: document.getElementById('kriteriaKode').value.trim().toUpperCase(),
+            nama: nama,
+            descKurang: document.getElementById('descKurang').value,
+            descCukup: document.getElementById('descCukup').value,
+            descBaik: document.getElementById('descBaik').value,
+            descExcellent: document.getElementById('descExcellent').value,
+            bobot: parseInt(document.getElementById('kriteriaBobot').value) || 10,
+            urutan: parseInt(document.getElementById('kriteriaUrutan').value) || kriteriaData.length+1
+        });
+        saveAll();
+        renderKriteriaMgmt();
+        renderFormKriteriaNilai();
+        renderDashboard();
+    });
+    document.getElementById('resetDefaultBtn')?.addEventListener('click', resetDefault);
+    document.getElementById('submitPenilaianBtn')?.addEventListener('click', submitPenilaian);
+    document.getElementById('dropdownPeserta')?.addEventListener('change', (e) => { 
+        if(e.target.value) tampilkanHasilPenilaian(parseInt(e.target.value)); 
+        else document.getElementById('hasilPenilaian').innerHTML = '';
+        resetFormPenilaian();
+    });
 
+    // NAVIGASI
     const btns = document.querySelectorAll('.nav-btn');
-    const panels = { dashboard:document.getElementById('dashboardPanel'), form:document.getElementById('formPanel'), management:document.getElementById('managementPanel') };
-    btns.forEach(btn=>{ btn.addEventListener('click',()=>{ Object.keys(panels).forEach(p=>panels[p].classList.remove('active-panel')); panels[btn.dataset.nav].classList.add('active-panel'); btns.forEach(b=>b.classList.remove('active')); btn.classList.add('active'); if(btn.dataset.nav==='management'){ renderJuri(); renderPeserta(); renderKriteriaMgmt(); } if(btn.dataset.nav==='form'){ renderFormKriteriaNilai(); renderPeserta(); renderJuri(); } }); });
-    renderJuri(); renderPeserta(); renderKriteriaMgmt(); renderFormKriteriaNilai();
+    const panels = { dashboard: document.getElementById('dashboardPanel'), form: document.getElementById('formPanel'), management: document.getElementById('managementPanel') };
+    btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            Object.keys(panels).forEach(p => panels[p].classList.remove('active-panel'));
+            panels[btn.dataset.nav].classList.add('active-panel');
+            btns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            if(btn.dataset.nav === 'management') { renderJuri(); renderPeserta(); renderKriteriaMgmt(); }
+            if(btn.dataset.nav === 'form') { renderFormKriteriaNilai(); renderPeserta(); renderJuri(); resetFormPenilaian(); }
+            if(btn.dataset.nav === 'dashboard') { renderDashboard(); }
+        });
+    });
+
+    renderJuri(); renderPeserta(); renderKriteriaMgmt(); renderFormKriteriaNilai(); renderDashboard();
 </script>
 </body>
 </html>
