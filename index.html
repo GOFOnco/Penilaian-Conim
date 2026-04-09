@@ -2,42 +2,69 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FORM PENILAIAN PDCARP - DASHBOARD LENGKAP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>FORM PENILAIAN PDCARP - RESPONSIVE</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: system-ui, 'Segoe UI', sans-serif;
+            font-family: system-ui, 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
         }
 
         body {
             background: #f1f5f9;
-            padding: 20px;
+            padding: 16px;
         }
 
+        /* RESPONSIVE CONTAINER */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* NAVBAR RESPONSIVE */
         .navbar {
             background: white;
             border-radius: 2rem;
-            padding: 0.8rem 2rem;
+            padding: 0.8rem 1rem;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
             flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        @media (min-width: 640px) {
+            .navbar {
+                justify-content: flex-start;
+                padding: 0.8rem 2rem;
+            }
+            body {
+                padding: 20px;
+            }
         }
 
         .nav-btn {
             background: transparent;
             border: none;
-            padding: 0.6rem 1.8rem;
-            font-size: 1rem;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.9rem;
             font-weight: 600;
             border-radius: 2rem;
             cursor: pointer;
             color: #334155;
+            transition: all 0.2s;
+        }
+
+        @media (min-width: 640px) {
+            .nav-btn {
+                padding: 0.6rem 1.8rem;
+                font-size: 1rem;
+            }
         }
 
         .nav-btn.active {
@@ -45,17 +72,19 @@
             color: white;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
+        /* PANEL */
         .panel {
             background: white;
             border-radius: 1.5rem;
-            padding: 1.8rem 2rem;
+            padding: 1.2rem;
             box-shadow: 0 8px 20px rgba(0,0,0,0.05);
             display: none;
+        }
+
+        @media (min-width: 640px) {
+            .panel {
+                padding: 1.8rem 2rem;
+            }
         }
 
         .panel.active-panel {
@@ -64,15 +93,24 @@
 
         h2, h3 {
             text-transform: uppercase;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
             color: #0f172a;
             border-left: 6px solid #3b82f6;
-            padding-left: 1rem;
-            font-size: 1.2rem;
+            padding-left: 0.8rem;
+            font-size: 1.1rem;
+            word-break: break-word;
+        }
+
+        @media (min-width: 640px) {
+            h2, h3 {
+                margin-bottom: 1.5rem;
+                font-size: 1.2rem;
+                padding-left: 1rem;
+            }
         }
 
         .form-group {
-            margin-bottom: 1.2rem;
+            margin-bottom: 1rem;
         }
 
         label {
@@ -81,7 +119,13 @@
             margin-bottom: 0.4rem;
             color: #1e293b;
             text-transform: uppercase;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
+        }
+
+        @media (min-width: 640px) {
+            label {
+                font-size: 0.8rem;
+            }
         }
 
         input, select, textarea {
@@ -89,18 +133,31 @@
             padding: 0.7rem 1rem;
             border: 1px solid #cbd5e1;
             border-radius: 1rem;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
         button.btn-primary {
             background: #3b82f6;
             color: white;
             border: none;
-            padding: 0.7rem 1.5rem;
+            padding: 0.7rem 1.2rem;
             border-radius: 2rem;
             font-weight: 700;
             cursor: pointer;
             text-transform: uppercase;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+
+        @media (min-width: 640px) {
+            button.btn-primary {
+                padding: 0.7rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        button.btn-primary:hover {
+            background: #2563eb;
         }
 
         button.btn-danger {
@@ -134,47 +191,84 @@
         .card-item {
             background: #f8fafc;
             border-radius: 1rem;
-            padding: 0.8rem 1rem;
+            padding: 0.8rem;
             border-left: 4px solid #3b82f6;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            gap: 0.5rem;
+            word-break: break-word;
         }
 
-        /* KRITERIA CARD */
+        @media (min-width: 640px) {
+            .card-item {
+                padding: 0.8rem 1rem;
+            }
+        }
+
+        /* KRITERIA CARD - RESPONSIVE */
         .kriteria-card {
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 1rem;
-            margin-bottom: 1.5rem;
-            padding: 1rem;
+            margin-bottom: 1.2rem;
+            padding: 0.8rem;
+        }
+
+        @media (min-width: 640px) {
+            .kriteria-card {
+                margin-bottom: 1.5rem;
+                padding: 1rem;
+            }
         }
 
         .kriteria-header {
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             margin-bottom: 0.8rem;
             color: #1e293b;
+            word-break: break-word;
         }
 
+        @media (min-width: 640px) {
+            .kriteria-header {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* RUBRIK GRID RESPONSIF */
         .rubrik-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: 1fr;
             gap: 0.5rem;
             margin-bottom: 1rem;
             padding-bottom: 0.8rem;
             border-bottom: 1px dashed #e2e8f0;
         }
 
+        @media (min-width: 768px) {
+            .rubrik-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
         .rubrik-item {
             padding: 0.5rem;
             border-radius: 0.5rem;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             line-height: 1.4;
             word-wrap: break-word;
             white-space: normal;
         }
+
+        @media (min-width: 640px) {
+            .rubrik-item {
+                font-size: 0.7rem;
+                padding: 0.5rem;
+            }
+        }
+
         .rubrik-kurang { background: #fef2f2; border-left: 3px solid #ef4444; }
         .rubrik-cukup { background: #fffbeb; border-left: 3px solid #f59e0b; }
         .rubrik-baik { background: #eff6ff; border-left: 3px solid #3b82f6; }
@@ -183,18 +277,21 @@
         .rubrik-title {
             font-weight: bold;
             margin-bottom: 0.3rem;
+            font-size: 0.7rem;
         }
+        
         .rubrik-desc {
             color: #475569;
+            font-size: 0.65rem;
         }
 
-        /* RATING LINGKARAN */
+        /* RATING LINGKARAN RESPONSIF */
         .rating-wrapper {
             text-align: center;
         }
         
         .rating-value {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #64748b;
             margin-bottom: 0.3rem;
             font-weight: bold;
@@ -204,23 +301,31 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 0.4rem;
+            gap: 0.3rem;
         }
         
         .circle {
-            width: 38px;
-            height: 38px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             cursor: pointer;
             transition: all 0.2s;
             background: #f1f5f9;
             border: 2px solid #cbd5e1;
             color: #475569;
+        }
+
+        @media (min-width: 640px) {
+            .circle {
+                width: 38px;
+                height: 38px;
+                font-size: 0.9rem;
+            }
         }
         
         .circle:hover {
@@ -232,7 +337,6 @@
             background: #3b82f6;
             border-color: #3b82f6;
             color: white;
-            box-shadow: 0 2px 8px rgba(59,130,246,0.4);
         }
         
         .circle.active[data-score="1"], .circle.active[data-score="2"], .circle.active[data-score="3"], .circle.active[data-score="4"] {
@@ -254,8 +358,15 @@
 
         .grid-2 {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            grid-template-columns: 1fr;
+            gap: 0.8rem;
+        }
+
+        @media (min-width: 640px) {
+            .grid-2 {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
         }
 
         .alert {
@@ -265,34 +376,41 @@
             border-radius: 1rem;
             margin-bottom: 1rem;
             font-weight: bold;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .alert-error {
             background: #fee2e2;
             color: #b91c1c;
         }
-        
-        .selected-value {
-            display: inline-block;
-            margin-left: 0.5rem;
-            font-weight: bold;
-            color: #3b82f6;
-        }
 
-        /* DASHBOARD STYLES */
+        /* DASHBOARD RESPONSIF */
         .dashboard-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: 1fr;
+            gap: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .dashboard-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
         }
         
         .stat-card {
             background: #f8fafc;
             border-radius: 1rem;
-            padding: 1rem;
+            padding: 0.8rem;
             border: 1px solid #e2e8f0;
+            overflow-x: auto;
+        }
+
+        @media (min-width: 640px) {
+            .stat-card {
+                padding: 1rem;
+            }
         }
         
         .stat-card h4 {
@@ -301,20 +419,22 @@
             border-bottom: 2px solid #3b82f6;
             display: inline-block;
             padding-bottom: 0.3rem;
+            font-size: 0.9rem;
         }
         
         .peserta-score-card {
             background: white;
             border-radius: 0.8rem;
-            padding: 0.8rem;
+            padding: 0.7rem;
             margin-bottom: 0.8rem;
             border: 1px solid #e2e8f0;
         }
         
         .peserta-name {
             font-weight: bold;
-            font-size: 1rem;
+            font-size: 0.9rem;
             margin-bottom: 0.3rem;
+            word-break: break-word;
         }
         
         .score-badge {
@@ -323,18 +443,39 @@
             color: white;
             padding: 0.2rem 0.6rem;
             border-radius: 1rem;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             margin-top: 0.3rem;
+            margin-right: 0.3rem;
         }
         
         .juri-list {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #64748b;
             margin-top: 0.3rem;
+            word-break: break-word;
         }
         
         canvas {
-            max-height: 400px;
+            max-height: 300px;
+            width: 100% !important;
+        }
+
+        /* Management layout responsive */
+        .management-flex {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .management-flex {
+                flex-direction: row;
+                gap: 2rem;
+            }
+        }
+
+        textarea {
+            resize: vertical;
         }
     </style>
 </head>
@@ -349,15 +490,15 @@
     <!-- MANAGEMENT PANEL -->
     <div id="managementPanel" class="panel">
         <h2>⚙️ MANAGEMENT DATA</h2>
-        <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+        <div class="management-flex">
             <div style="flex:1">
-                <h3>JURI</h3>
+                <h3>👨‍⚖️ JURI</h3>
                 <input type="text" id="juriName" placeholder="Nama Juri">
-                <button class="btn-primary" id="addJuriBtn" style="margin-top:0.5rem">TAMBAH JURI</button>
+                <button class="btn-primary" id="addJuriBtn" style="margin-top:0.5rem">+ TAMBAH JURI</button>
                 <div id="juriList" class="card-list"></div>
             </div>
             <div style="flex:2">
-                <h3>PESERTA</h3>
+                <h3>👥 PESERTA</h3>
                 <div class="grid-2">
                     <input type="text" id="pesertaName" placeholder="Nama Peserta">
                     <select id="channelSelect">
@@ -367,12 +508,12 @@
                     </select>
                 </div>
                 <input type="text" id="judulConim" placeholder="Judul Conim" style="margin-top:0.5rem">
-                <button class="btn-primary" id="addPesertaBtn" style="margin-top:0.5rem">TAMBAH PESERTA</button>
+                <button class="btn-primary" id="addPesertaBtn" style="margin-top:0.5rem">+ TAMBAH PESERTA</button>
                 <div id="pesertaList" class="card-list"></div>
             </div>
         </div>
         <hr style="margin: 1.5rem 0">
-        <h3>KRITERIA PENILAIAN</h3>
+        <h3>📋 KRITERIA PENILAIAN</h3>
         <div class="grid-2">
             <input type="text" id="kriteriaKode" placeholder="Kode (1A,2B)">
             <input type="text" id="kriteriaName" placeholder="Nama Kriteria">
@@ -385,8 +526,8 @@
             <input type="number" id="kriteriaBobot" placeholder="Bobot Max" value="10">
             <input type="number" id="kriteriaUrutan" placeholder="Urutan" value="1">
         </div>
-        <button class="btn-primary" id="addKriteriaBtn">TAMBAH KRITERIA</button>
-        <button class="btn-primary" id="resetDefaultBtn" style="background:#64748b; margin-left:0.5rem">RESET DEFAULT</button>
+        <button class="btn-primary" id="addKriteriaBtn">+ TAMBAH KRITERIA</button>
+        <button class="btn-primary" id="resetDefaultBtn" style="background:#64748b; margin-left:0.5rem">🔄 RESET DEFAULT</button>
         <div id="kriteriaListMgmt" class="card-list"></div>
     </div>
 
@@ -403,8 +544,8 @@
             <select id="dropdownJuri"><option value="">TANPA JURI</option></select>
         </div>
         <div id="dynamicKriteriaNilai"></div>
-        <button class="btn-primary" id="submitPenilaianBtn" style="margin-top:1rem">✅ SUBMIT PENILAIAN</button>
-        <div id="hasilPenilaian" style="margin-top: 2rem;"></div>
+        <button class="btn-primary" id="submitPenilaianBtn" style="margin-top:1rem; width:100%;">✅ SUBMIT PENILAIAN</button>
+        <div id="hasilPenilaian" style="margin-top: 1.5rem;"></div>
     </div>
 
     <!-- DASHBOARD PANEL -->
@@ -412,7 +553,7 @@
         <h2>📊 DASHBOARD PENILAIAN</h2>
         <div class="dashboard-stats">
             <div class="stat-card">
-                <h4>📈 GRAFIK TOTAL SKOR PESERTA</h4>
+                <h4>📈 GRAFIK RATA-RATA SKOR</h4>
                 <canvas id="scoreChart" width="400" height="300"></canvas>
             </div>
             <div class="stat-card">
@@ -424,7 +565,7 @@
 </div>
 
 <script>
-    // DEFAULT KRITERIA PDCARP DENGAN DESKRIPSI LENGKAP
+    // ======================= DEFAULT KRITERIA PDCARP =======================
     const DEFAULT_KRITERIA = [
         { id:1001, kode:"1A", nama:"IDENTIFIKASI MASALAH & PENENTUAN TEMA", 
           descKurang:"TIDAK ADA IDENTIFIKASI YANG JELAS DITINJAU DARI ASPEK MUTU, TEMA TIDAK SESUAI DENGAN KEBIJAKAN PERUSAHAAN",
@@ -473,13 +614,62 @@
           descExcellent:"MENGGUNAKAN ANIMASI/ PERAGA YANG TEPAT DAN MEMPERJELAS KASUS YANG DIHADAPI", bobot:10, urutan:9 }
     ];
 
+    // ======================= DATA DUMMY =======================
+    const DUMMY_JURI = [
+        { id: 9001, nama: "BAPAK HERU" },
+        { id: 9002, nama: "IBU SITI" },
+        { id: 9003, nama: "BAPAK BUDI" }
+    ];
+
+    const DUMMY_PESERTA = [
+        { id: 8001, nama: "TIM INOVASI QCC", channel: "QCC", judulConim: "PENINGKATAN EFISIENSI PRODUKSI DENGAN METODE KAIZEN" },
+        { id: 8002, nama: "TIM DIGITAL SS", channel: "SS", judulConim: "DIGITALISASI PROSES BISNIS UNTUK MENINGKATKAN PRODUKTIVITAS" },
+        { id: 8003, nama: "TIM QCP MAJU", channel: "QCP", judulConim: "IMPLEMENTASI TOTAL QUALITY MANAGEMENT DI LINI PRODUKSI" }
+    ];
+
+    // Data penilaian dummy (rata-rata nilai 7-9)
+    const DUMMY_PENILAIAN = [
+        { id: 7001, pesertaId: 8001, juriId: 9001, tanggal: "2026-04-08 10:30:00", nilaiPerKriteria: [
+            { kriteriaId: 1001, nilai: 8 }, { kriteriaId: 1002, nilai: 7 }, { kriteriaId: 1003, nilai: 8 },
+            { kriteriaId: 1004, nilai: 7 }, { kriteriaId: 1005, nilai: 8 }, { kriteriaId: 1006, nilai: 7 },
+            { kriteriaId: 1007, nilai: 8 }, { kriteriaId: 1008, nilai: 7 }, { kriteriaId: 1009, nilai: 8 }
+        ]},
+        { id: 7002, pesertaId: 8001, juriId: 9002, tanggal: "2026-04-08 11:00:00", nilaiPerKriteria: [
+            { kriteriaId: 1001, nilai: 9 }, { kriteriaId: 1002, nilai: 8 }, { kriteriaId: 1003, nilai: 9 },
+            { kriteriaId: 1004, nilai: 8 }, { kriteriaId: 1005, nilai: 9 }, { kriteriaId: 1006, nilai: 8 },
+            { kriteriaId: 1007, nilai: 9 }, { kriteriaId: 1008, nilai: 8 }, { kriteriaId: 1009, nilai: 9 }
+        ]},
+        { id: 7003, pesertaId: 8002, juriId: 9001, tanggal: "2026-04-08 09:00:00", nilaiPerKriteria: [
+            { kriteriaId: 1001, nilai: 7 }, { kriteriaId: 1002, nilai: 6 }, { kriteriaId: 1003, nilai: 7 },
+            { kriteriaId: 1004, nilai: 6 }, { kriteriaId: 1005, nilai: 7 }, { kriteriaId: 1006, nilai: 6 },
+            { kriteriaId: 1007, nilai: 7 }, { kriteriaId: 1008, nilai: 6 }, { kriteriaId: 1009, nilai: 7 }
+        ]},
+        { id: 7004, pesertaId: 8002, juriId: 9003, tanggal: "2026-04-08 09:30:00", nilaiPerKriteria: [
+            { kriteriaId: 1001, nilai: 8 }, { kriteriaId: 1002, nilai: 7 }, { kriteriaId: 1003, nilai: 8 },
+            { kriteriaId: 1004, nilai: 7 }, { kriteriaId: 1005, nilai: 8 }, { kriteriaId: 1006, nilai: 7 },
+            { kriteriaId: 1007, nilai: 8 }, { kriteriaId: 1008, nilai: 7 }, { kriteriaId: 1009, nilai: 8 }
+        ]},
+        { id: 7005, pesertaId: 8003, juriId: 9002, tanggal: "2026-04-08 13:00:00", nilaiPerKriteria: [
+            { kriteriaId: 1001, nilai: 9 }, { kriteriaId: 1002, nilai: 9 }, { kriteriaId: 1003, nilai: 9 },
+            { kriteriaId: 1004, nilai: 8 }, { kriteriaId: 1005, nilai: 9 }, { kriteriaId: 1006, nilai: 8 },
+            { kriteriaId: 1007, nilai: 9 }, { kriteriaId: 1008, nilai: 8 }, { kriteriaId: 1009, nilai: 9 }
+        ]}
+    ];
+
+    // ======================= INISIALISASI DATA =======================
     let juriData = JSON.parse(localStorage.getItem('juriData')) || [];
     let pesertaData = JSON.parse(localStorage.getItem('pesertaData')) || [];
     let kriteriaData = JSON.parse(localStorage.getItem('kriteriaData')) || [];
     let penilaianData = JSON.parse(localStorage.getItem('penilaianData')) || [];
     let nilaiKriteria = {};
 
-    if(kriteriaData.length === 0) { kriteriaData = JSON.parse(JSON.stringify(DEFAULT_KRITERIA)); saveAll(); }
+    // Load dummy data jika kosong
+    if(juriData.length === 0) juriData = DUMMY_JURI;
+    if(pesertaData.length === 0) pesertaData = DUMMY_PESERTA;
+    if(kriteriaData.length === 0) kriteriaData = JSON.parse(JSON.stringify(DEFAULT_KRITERIA));
+    if(penilaianData.length === 0) penilaianData = DUMMY_PENILAIAN;
+
+    saveAll();
 
     function saveAll() {
         localStorage.setItem('juriData', JSON.stringify(juriData));
@@ -499,7 +689,7 @@
     function renderPeserta() {
         const container = document.getElementById('pesertaList');
         if(!container) return;
-        container.innerHTML = pesertaData.length ? pesertaData.map(p => `<div class="card-item"><div><strong>${p.nama}</strong> (${p.channel})<br><small>${p.judulConim}</small></div><button class="btn-danger" onclick="hapusPeserta(${p.id})">HAPUS</button></div>`).join('') : '<div class="card-item">BELUM ADA PESERTA</div>';
+        container.innerHTML = pesertaData.length ? pesertaData.map(p => `<div class="card-item"><div><strong>${p.nama}</strong> (${p.channel})<br><small>${p.judulConim.substring(0,50)}${p.judulConim.length>50?'...':''}</small></div><button class="btn-danger" onclick="hapusPeserta(${p.id})">HAPUS</button></div>`).join('') : '<div class="card-item">BELUM ADA PESERTA</div>';
         const dp = document.getElementById('dropdownPeserta');
         if(dp) dp.innerHTML = '<option value="">-- PILIH PESERTA --</option>' + pesertaData.map(p => `<option value="${p.id}">${p.nama} (${p.channel})</option>`).join('');
         renderDashboard();
@@ -509,7 +699,7 @@
         const container = document.getElementById('kriteriaListMgmt');
         if(!container) return;
         if(kriteriaData.length === 0) { container.innerHTML = '<div class="card-item">BELUM ADA KRITERIA</div>'; return; }
-        container.innerHTML = kriteriaData.map(k => `<div class="card-item" style="flex-direction:column; align-items:flex-start;"><div><strong>[${k.kode}] ${k.nama}</strong> (MAX:${k.bobot}) <button class="btn-warning" onclick="editKriteria(${k.id})">EDIT</button><button class="btn-danger" onclick="hapusKriteria(${k.id})">HAPUS</button></div><div style="font-size:0.7rem; color:#555; margin-top:0.3rem;">K: ${(k.descKurang||'-').substring(0,60)}...</div></div>`).join('');
+        container.innerHTML = kriteriaData.map(k => `<div class="card-item" style="flex-direction:column; align-items:flex-start;"><div><strong>[${k.kode}] ${k.nama}</strong> (MAX:${k.bobot}) <button class="btn-warning" onclick="editKriteria(${k.id})">EDIT</button><button class="btn-danger" onclick="hapusKriteria(${k.id})">HAPUS</button></div><div style="font-size:0.65rem; color:#555; margin-top:0.3rem;">📝 ${(k.descKurang||'-').substring(0,60)}${(k.descKurang||'').length>60?'...':''}</div></div>`).join('');
     }
 
     window.setRating = function(kriteriaId, score) {
@@ -587,10 +777,7 @@
         saveAll();
         showAlert('PENILAIAN BERHASIL DISIMPAN!', 'success');
         
-        // Reset form setelah submit
         resetFormPenilaian();
-        
-        // Tampilkan hasil penilaian untuk peserta yang sama
         tampilkanHasilPenilaian(parseInt(pesertaId));
         renderDashboard();
     }
@@ -607,17 +794,17 @@
         if(!peserta) return;
         const data = penilaianData.filter(p => p.pesertaId === pesertaId);
         if(data.length === 0) { container.innerHTML = `<div class="card-item">BELUM ADA PENILAIAN</div>`; return; }
-        let html = `<h3 style="font-size:1rem;">RIWAYAT: ${peserta.nama} (${peserta.channel})</h3>`;
-        data.forEach((pen, idx) => {
-            let total = 0, detail = '<ul style="margin-left:1rem; font-size:0.8rem;">';
+        let html = `<h3 style="font-size:0.9rem;">📋 RIWAYAT: ${peserta.nama} (${peserta.channel})</h3>`;
+        data.slice().reverse().forEach((pen, idx) => {
+            let total = 0, detail = '<ul style="margin-left:1rem; font-size:0.7rem;">';
             pen.nilaiPerKriteria.forEach(nk => {
                 const k = kriteriaData.find(kr => kr.id === nk.kriteriaId);
-                detail += `<li>${k ? `[${k.kode}] ${k.nama}` : `ID:${nk.kriteriaId}`}: ${nk.nilai} / ${k?.bobot||10}</li>`;
+                detail += `<li>${k ? `[${k.kode}] ${k.nama.substring(0,30)}` : `ID:${nk.kriteriaId}`}: ${nk.nilai} / ${k?.bobot||10}</li>`;
                 total += nk.nilai;
             });
             const juri = pen.juriId ? juriData.find(j => j.id === pen.juriId) : null;
-            detail += `</ul><strong>TOTAL: ${total}</strong><br><small>JURI: ${juri ? juri.nama : 'TANPA JURI'} | TANGGAL: ${pen.tanggal}</small>`;
-            html += `<div class="card-item" style="flex-direction:column; align-items:flex-start;">PENILAIAN #${idx+1}<br>${detail}</div>`;
+            detail += `</ul><strong>TOTAL: ${total}</strong><br><small>👨‍⚖️ ${juri ? juri.nama : 'TANPA JURI'} | 📅 ${pen.tanggal}</small>`;
+            html += `<div class="card-item" style="flex-direction:column; align-items:flex-start; margin-top:0.5rem;">PENILAIAN #${data.length - idx}<br>${detail}</div>`;
         });
         container.innerHTML = html;
     }
@@ -628,7 +815,6 @@
             return;
         }
         
-        // Hitung total skor per peserta (rata-rata dari semua penilaian)
         const pesertaScores = pesertaData.map(p => {
             const penilaianPeserta = penilaianData.filter(pen => pen.pesertaId === p.id);
             let totalSemuaNilai = 0;
@@ -638,8 +824,7 @@
                 totalSemuaNilai += totalNilai;
             });
             const avgScore = jumlahPenilaian > 0 ? totalSemuaNilai / jumlahPenilaian : 0;
-            // Dapatkan daftar juri yang sudah menilai
-            const juriIds = [...new Set(penilaianPeserta.map(pen => pen.juriId).filter(id => id !== null))];
+            const juriIds = [...new Set(penilaianPeserta.map(pen => pen.juriId).filter(id => id !== null && id !== undefined))];
             const juriNames = juriIds.map(id => {
                 const juri = juriData.find(j => j.id === id);
                 return juri ? juri.nama : 'Unknown';
@@ -654,23 +839,21 @@
             };
         });
         
-        // Score Card
         const scoreCardHtml = pesertaScores.map(ps => `
             <div class="peserta-score-card">
                 <div class="peserta-name">${ps.nama} (${ps.channel})</div>
-                <div><span class="score-badge">⭐ RATA-RATA: ${ps.avgScore.toFixed(1)}</span> <span class="score-badge" style="background:#64748b">📊 TOTAL PENILAIAN: ${ps.totalPenilaian}</span></div>
-                <div class="juri-list">👨‍⚖️ JURI YANG MENILAI: ${ps.juriList.length > 0 ? ps.juriList.join(', ') : 'BELUM ADA'}</div>
+                <div><span class="score-badge">⭐ RATA-RATA: ${ps.avgScore.toFixed(1)}</span> <span class="score-badge" style="background:#64748b">📊 TOTAL: ${ps.totalPenilaian} X</span></div>
+                <div class="juri-list">👨‍⚖️ JURI: ${ps.juriList.length > 0 ? ps.juriList.join(', ') : 'BELUM ADA'}</div>
             </div>
         `).join('');
         document.getElementById('scoreCardList').innerHTML = scoreCardHtml || '<div class="card-item">BELUM ADA PENILAIAN</div>';
         
-        // Chart
         const ctx = document.getElementById('scoreChart').getContext('2d');
         if(window.scoreChartInstance) window.scoreChartInstance.destroy();
         window.scoreChartInstance = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: pesertaScores.map(ps => ps.nama),
+                labels: pesertaScores.map(ps => ps.nama.length > 15 ? ps.nama.substring(0,12)+'...' : ps.nama),
                 datasets: [{
                     label: 'RATA-RATA SKOR',
                     data: pesertaScores.map(ps => ps.avgScore),
@@ -684,12 +867,12 @@
                 responsive: true,
                 maintainAspectRatio: true,
                 plugins: {
-                    legend: { position: 'top' },
+                    legend: { position: 'top', labels: { font: { size: 10 } } },
                     tooltip: { callbacks: { label: (ctx) => `SKOR: ${ctx.raw.toFixed(1)}` } }
                 },
                 scales: {
-                    y: { beginAtZero: true, title: { display: true, text: 'SKOR' } },
-                    x: { title: { display: true, text: 'PESERTA' } }
+                    y: { beginAtZero: true, title: { display: true, text: 'SKOR', font: { size: 10 } } },
+                    x: { title: { display: true, text: 'PESERTA', font: { size: 10 } }, ticks: { font: { size: 9 } } }
                 }
             }
         });
