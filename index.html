@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Form Penilaian Konvensi Inovasi Dankos 2025</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #e9f0f5;
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 24px 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 28px;
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      padding: 20px 24px 32px 24px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin: 0 0 6px 0;
+      color: #0a2b3e;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    h1 small {
+      font-size: 0.8rem;
+      font-weight: normal;
+      background: #d9eaf5;
+      padding: 6px 14px;
+      border-radius: 40px;
+      color: #005a8c;
+    }
+
+    .sub {
+      color: #2c6979;
+      border-left: 4px solid #2c9faf;
+      padding-left: 16px;
+      margin: 8px 0 24px 0;
+      font-weight: 500;
+    }
+
+    /* header informasi peserta */
+    .info-card {
+      background: #f8fafc;
+      border-radius: 24px;
+      padding: 16px 24px;
+      margin-bottom: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      border: 1px solid #cbdde6;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+
+    .info-field {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .info-field label {
+      font-weight: 700;
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #2c6979;
+      margin-bottom: 6px;
+    }
+
+    .info-field input, .info-field select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 16px;
+      border: 1px solid #b9cfdf;
+      background: white;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: 0.2s;
+    }
+
+    .info-field input:focus, .info-field select:focus {
+      outline: none;
+      border-color: #1f8a9c;
+      box-shadow: 0 0 0 3px rgba(31,138,156,0.2);
+    }
+
+    /* tabel kriteria */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 28px 0 24px;
+      border-radius: 20px;
+      border: 1px solid #e2edf2;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      min-width: 900px;
+    }
+
+    th {
+      background: #eef3f7;
+      color: #1a4b5e;
+      padding: 14px 10px;
+      font-weight: 700;
+      border-bottom: 2px solid #cde0e8;
+      text-align: center;
+    }
+
+    td {
+      padding: 12px 8px;
+      border-bottom: 1px solid #e0edf2;
+      vertical-align: middle;
+    }
+
+    .criteria-group {
+      background-color: #f9fdfe;
+      font-weight: 700;
+      border-left: 4px solid #2c9faf;
+    }
+
+    .criteria-item td:first-child {
+      font-weight: 500;
+      background-color: #ffffff;
+    }
+
+    .score-select {
+      width: 85px;
+      padding: 8px 6px;
+      border-radius: 20px;
+      border: 1px solid #bad2df;
+      background: white;
+      font-weight: 600;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+
+    .bobot-cell {
+      text-align: center;
+      font-weight: 600;
+      background: #f1f7fa;
+    }
+
+    .hasil-cell {
+      text-align: center;
+      font-weight: 700;
+      background: #fef7e0;
+      color: #b1620c;
+    }
+
+    .feedback-section {
+      margin-top: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .feedback-box {
+      flex: 1;
+      background: #fefaf5;
+      border-radius: 24px;
+      padding: 18px 22px;
+      border: 1px solid #f0e2cf;
+    }
+
+    .feedback-box h3 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+      color: #1f5e6e;
+    }
+
+    .feedback-box textarea {
+      width: 100%;
+      border-radius: 20px;
+      border: 1px solid #d4c8b5;
+      padding: 12px;
+      font-family: inherit;
+      resize: vertical;
+      background: white;
+    }
+
+    .result-area {
+      background: #e6f4f0;
+      border-radius: 32px;
+      padding: 18px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .total-score {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #005f73;
+    }
+
+    .total-score span {
+      font-size: 1rem;
+      font-weight: normal;
+    }
+
+    .btn-reset {
+      background: white;
+      border: 1px solid #2c9faf;
+      padding: 10px 24px;
+      border-radius: 40px;
+      font-weight: bold;
+      color: #1f6e7a;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-reset:hover {
+      background: #dff2f5;
+    }
+
+    .footer-note {
+      font-size: 0.7rem;
+      text-align: center;
+      margin-top: 28px;
+      color: #6f8f9c;
+      border-top: 1px solid #cde0e8;
+      padding-top: 20px;
+    }
+
+    .score-highlight {
+      background: #fff2df;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>
+    📋 Form Penilaian Konvensi Inovasi Dankos 2025
+    <small>SS / OSR / QCC / QCP</small>
+  </h1>
+  <div class="sub">Pedoman penilaian mengacu kriteria PLAN-DO-CHECK-ACTION (PDCA) + REPORT & PRESENTATION</div>
+
+  <!-- data peserta & juri -->
+  <div class="info-card">
+    <div class="info-field">
+      <label>🏢 Perusahaan</label>
+      <input type="text" id="company" value="PT. DANKOS FARMA" readonly style="background:#f2f6f9;">
+    </div>
+    <div class="info-field">
+      <label>👥 Nama Peserta / Tim</label>
+      <input type="text" id="peserta" placeholder="Contoh: Zainal Abidin / Tim Inovasi">
+    </div>
+    <div class="info-field">
+      <label>📢 Channel / Judul Conim</label>
+      <input type="text" id="judul" placeholder="SS - Management Filter Bag ...">
+    </div>
+    <div class="info-field">
+      <label>⚖️ Nama Juri</label>
+      <input type="text" id="juri" placeholder="Nama Juri">
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <table id="scoreTable">
+      <thead>
+        <tr>
+          <th>PDCA/RP</th><th>ITEM / KRITERIA</th><th>BOBOT</th><th>Deskripsi Singkat</th><th>Nilai (1-10)</th><th>Hasil (Bobot x Nilai)</th>
+        </tr>
+        <tr style="background:#f2f9fc; font-size:0.75rem;">
+          <th colspan="6">✨ Skala: Kurang(1-4) | Cukup(5-6) | Baik(7-8) | Excellent(9-10)</th>
+        </tr>
+      </thead>
+      <tbody id="dynamicRows">
+        <!-- data akan diisi javascript berdasarkan kriteria dari excel -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Feedback strength & opprtunity -->
+  <div class="feedback-section">
+    <div class="feedback-box">
+      <h3>💪 STRENGTH POINT (Kelebihan / unggulan)</h3>
+      <textarea rows="3" id="strengthPoint" placeholder="Tulis poin kekuatan dari presentasi / proyek ini ..."></textarea>
+    </div>
+    <div class="feedback-box">
+      <h3>🔄 OPPORTUNITY FOR IMPROVEMENT (Area pengembangan)</h3>
+      <textarea rows="3" id="improvementPoint" placeholder="Saran perbaikan, potensi yang bisa ditingkatkan ..."></textarea>
+    </div>
+  </div>
+
+  <!-- Total skor & actions -->
+  <div class="result-area">
+    <div class="total-score">🏆 TOTAL SKOR: <span id="totalScore">0</span> <span style="font-size:0.9rem;">/ Maks 250</span></div>
+    <div>
+      <button class="btn-reset" id="resetBtn">↺ Reset Nilai</button>
+      <button class="btn-reset" id="exportBtn" style="background:#1f6e7a; color:white; border:none; margin-left:12px;">📄 Simpan / Ringkasan</button>
+    </div>
+  </div>
+  <div class="footer-note">
+    * Penilaian mengacu kriteria konvensi (SS/OSR/QCC/QCP) - Nilai diisi 1-10, hasil otomatis terbobot. Max 250 poin.<br>
+    Strength & Improvement akan disertakan dalam ringkasan.
+  </div>
+</div>
+
+<script>
+  // =============== DATA KRITERIA BERDASARKAN SHEET "Penilaian Saat Proses Seleksi" ===============
+  // diambil dari sheet utama (kolom item, bobot, kriteria, deskripsi ringkas)
+  const kriteriaList = [
+    { group: "PLAN", item: "1. Masalah, Tema, Sasaran", kriteria: "1a. Identifikasi masalah & penentuan tema", bobot: 0.15, desc: "Prioritas data mutu & kebijakan perusahaan" },
+    { group: "PLAN", item: "1. Masalah, Tema, Sasaran", kriteria: "1b. Visualisasi/simulasi identifikasi masalah", bobot: 0.15, desc: "Sasaran terukur & hilangkan masalah" },
+    { group: "PLAN", item: "2. Proses Analisa Masalah & Rencana Perbaikan", kriteria: "2a. Analisis sebab akibat", bobot: 0.10, desc: "Korelasi logis & lengkap" },
+    { group: "PLAN", item: "2. Proses Analisa Masalah & Rencana Perbaikan", kriteria: "2b. Analisis & penetapan akar penyebab", bobot: 0.10, desc: "Prioritas berdasarkan data & fakta" },
+    { group: "PLAN", item: "2. Proses Analisa Masalah & Rencana Perbaikan", kriteria: "2c. Perencanaan perbaikan", bobot: 0.10, desc: "5W+2H jelas & benar" },
+    { group: "PLAN", item: "2. Proses Analisa Masalah & Rencana Perbaikan", kriteria: "2d. Pemanfaatan peranan pihak terkait", bobot: 0.10, desc: "Didukung aktif & efektif" },
+    { group: "PLAN", item: "3. Solusi (Jumlah & Kategori)", kriteria: "3a. Kreativitas penyelesaian masalah", bobot: 0.20, desc: "Alternatif solusi dgn analisis kuantitatif" },
+    { group: "PLAN", item: "3. Solusi (Jumlah & Kategori)", kriteria: "3b. Kategori Solusi", bobot: 0.20, desc: "Inovasi nasional / internasional" },
+    { group: "DO", item: "4. Mutu proses Pelaksanaan", kriteria: "4a. Kerjasama anggota", bobot: 0.05, desc: "Kontribusi optimal & proporsional" },
+    { group: "DO", item: "4. Mutu proses Pelaksanaan", kriteria: "4b. Pemantauan, penerapan, perbaikan", bobot: 0.05, desc: "Pemantauan efektif + dokumentasi lengkap" },
+    { group: "DO", item: "5. Tingkat kesulitan", kriteria: "5a. Tingkat kesulitan Upaya perbaikan", bobot: 0.05, desc: "Belajar & berbagi kompetensi baru" },
+    { group: "CHECK", item: "6. Ketepatan & Kelengkapan Evaluasi", kriteria: "6a. Evaluasi hasil (cakupan QCDSMPE)", bobot: 0.05, desc: "Mencakup 6-7 aspek QCDSMPE" },
+    { group: "CHECK", item: "6. Ketepatan & Kelengkapan Evaluasi", kriteria: "6b. Evaluasi terhadap aspek mutu", bobot: 0.05, desc: "Semua aspek tepat & akurat" },
+    { group: "CHECK", item: "6. Ketepatan & Kelengkapan Evaluasi", kriteria: "6c. Pengelolaan dampak", bobot: 0.05, desc: "Dampak negatif tertanggulangi & positif optimal" },
+    { group: "CHECK", item: "7. Dampak Hasil Perbaikan", kriteria: "7a. Rasio pencapaian sebelum & sesudah", bobot: 0.20, desc: "Peningkatan >100% / NQI signifikan" },
+    { group: "CHECK", item: "7. Dampak Hasil Perbaikan", kriteria: "7b. Lingkup dampak / Penerapan", bobot: 0.20, desc: "Aplikatif industri lain / masyarakat luas" },
+    { group: "CHECK", item: "7. Dampak Hasil Perbaikan", kriteria: "7c. Prestasi Kinerja", bobot: 0.20, desc: "Melampaui prestasi kompetitor dunia" },
+    { group: "ACTION", item: "8. Standardisasi & Continuous Improvement", kriteria: "8a. Standardisasi", bobot: 0.05, desc: "Standar baru lengkap & terjamin penerapannya" },
+    { group: "ACTION", item: "8. Standardisasi & Continuous Improvement", kriteria: "8b. Penetapan tema berikutnya", bobot: 0.05, desc: "Prioritas semua aspek mutu, data lengkap akurat" },
+    { group: "REPORT", item: "9. Mutu Makalah", kriteria: "9a. Sistematika & mutu penulisan", bobot: 0.05, desc: "Terstruktur, informatif & detail" },
+    { group: "REPORT", item: "9. Mutu Makalah", kriteria: "9b. Estetika & daya tarik risalah", bobot: 0.05, desc: "Ilustrasi proporsional & sangat menarik" },
+    { group: "REPORT", item: "9. Mutu Makalah", kriteria: "9c. Kesesuaian dengan aturan", bobot: 0.05, desc: "Sesuai aturan baku berbagai format" },
+    { group: "PRESENTATION", item: "10. Mutu Presentasi", kriteria: "10a. Kejelasan presentasi", bobot: 0.10, desc: "Animasi tepat & memperjelas kasus" },
+    { group: "PRESENTATION", item: "10. Mutu Presentasi", kriteria: "10b. Unsur hiburan", bobot: 0.10, desc: "Sangat menarik & menghibur pemirsa" },
+    { group: "PRESENTATION", item: "10. Mutu Presentasi", kriteria: "10c. Pengelolaan presentasi", bobot: 0.10, desc: "Semua anggota kuasai materi & waktu efektif" }
+  ];
+
+  // validasi total bobot (seharusnya 1.0 => 0.15+0.15+0.1*4+0.2*2+0.05*7+0.2*3+0.05*2+0.05*3+0.1*3 = 2.5? Tapi skala hasil max 250 artinya total bobot kumulatif 25, tapi pada form max 250 = (bobot*10*25)? Konsisten dengan sheet asli: max 250. 
+  // di sheet asli perhitungan = bobot * score, score max 10, total bobot semua item = 2.5? Check: 0.15+0.15+0.1+0.1+0.1+0.1+0.2+0.2+0.05+0.05+0.05+0.05+0.05+0.05+0.2+0.2+0.2+0.05+0.05+0.05+0.05+0.05+0.1+0.1+0.1 = 2.5 . Maka total maks = 2.5 * 10 = 25? tapi di excel hasil result = 250 dari (3x5)?? Itu mungkin perkalian tambahan. Namun karena kita gunakan langsung bobot x score (1-10) maka max teoretis 25*10 = 250. Jadi konsisten: totalSkor maks 250.
+  
+  // render table
+  function renderTable() {
+    const tbody = document.getElementById('dynamicRows');
+    tbody.innerHTML = '';
+    let prevGroup = '';
+    kriteriaList.forEach((k, idx) => {
+      const row = tbody.insertRow();
+      if (prevGroup !== k.group) {
+        const groupCell = row.insertCell(0);
+        groupCell.textContent = k.group;
+        groupCell.style.fontWeight = 'bold';
+        groupCell.style.backgroundColor = '#eef3f7';
+        groupCell.rowSpan = kriteriaList.filter(item => item.group === k.group).length;
+        prevGroup = k.group;
+      } else {
+        row.insertCell(0); // kosong karena rowspan
+      }
+      // Item kolom
+      const itemCell = row.insertCell(1);
+      itemCell.textContent = k.item;
+      // bobot
+      const bobotCell = row.insertCell(2);
+      bobotCell.textContent = (k.bobot * 100).toFixed(0) + '%';
+      bobotCell.classList.add('bobot-cell');
+      // deskripsi singkat
+      const descCell = row.insertCell(3);
+      descCell.textContent = k.desc;
+      descCell.style.fontSize = '0.8rem';
+      // select nilai
+      const selectCell = row.insertCell(4);
+      const select = document.createElement('select');
+      select.className = 'score-select';
+      select.setAttribute('data-idx', idx);
+      for (let s = 1; s <= 10; s++) {
+        const option = document.createElement('option');
+        option.value = s;
+        option.textContent = s;
+        if (s === 7) option.selected = true; // default nilai 7 (Baik)
+        select.appendChild(option);
+      }
+      select.addEventListener('change', () => updateTotal());
+      selectCell.appendChild(select);
+      // hasil kolom
+      const hasilCell = row.insertCell(5);
+      hasilCell.classList.add('hasil-cell');
+      hasilCell.id = `hasil_${idx}`;
+      hasilCell.textContent = '0';
+    });
+    updateTotal();
+  }
+
+  // hitung total
+  function updateTotal() {
+    let total = 0;
+    for (let i = 0; i < kriteriaList.length; i++) {
+      const selectEl = document.querySelector(`.score-select[data-idx='${i}']`);
+      if (selectEl) {
+        const score = parseFloat(selectEl.value);
+        const bobot = kriteriaList[i].bobot;
+        const weighted = score * bobot * 10;  // karena bobot asli 0.15 -> 0.15 * score*10 = skala 250 (karena total bobot*10 maks = 25*10 =250)
+        // alternatif: agar total max 250: setiap item = bobot * score * 10, konsisten
+        const hasilCell = document.getElementById(`hasil_${i}`);
+        const displayWeighted = (score * bobot * 10).toFixed(1);
+        hasilCell.textContent = displayWeighted;
+        total += score * bobot * 10;
+      }
+    }
+    document.getElementById('totalScore').innerText = Math.round(total * 10) / 10;
+  }
+
+  // reset semua nilai ke 7
+  function resetScores() {
+    for (let i = 0; i < kriteriaList.length; i++) {
+      const select = document.querySelector(`.score-select[data-idx='${i}']`);
+      if (select) select.value = '7';
+    }
+    updateTotal();
+    document.getElementById('strengthPoint').value = '';
+    document.getElementById('improvementPoint').value = '';
+  }
+
+  // export ringkasan
+  function exportSummary() {
+    const peserta = document.getElementById('peserta').value.trim() || 'Tidak diisi';
+    const judul = document.getElementById('judul').value.trim() || 'Tidak diisi';
+    const juri = document.getElementById('juri').value.trim() || 'Tidak diisi';
+    const total = document.getElementById('totalScore').innerText;
+    const strength = document.getElementById('strengthPoint').value || 'N/A';
+    const improvement = document.getElementById('improvementPoint').value || 'N/A';
+    
+    // kumpulkan detail nilai per kriteria
+    let detailRows = '';
+    for (let i = 0; i < kriteriaList.length; i++) {
+      const select = document.querySelector(`.score-select[data-idx='${i}']`);
+      const nilai = select ? select.value : '-';
+      const hasil = document.getElementById(`hasil_${i}`)?.innerText || '0';
+      detailRows += `${kriteriaList[i].group} - ${kriteriaList[i].kriteria} : Nilai = ${nilai} | Bobot × Nilai = ${hasil}\n`;
+    }
+    
+    const summary = `=========================================
+📋 HASIL PENILAIAN KONVENSI INOVASI DANKOS 2025
+=========================================
+👥 Peserta       : ${peserta}
+📌 Judul Conim   : ${judul}
+⚖️ Juri          : ${juri}
+🏆 TOTAL SKOR    : ${total} / 250
+
+💪 STRENGTH POINT:
+${strength}
+
+🔄 OPPORTUNITY FOR IMPROVEMENT:
+${improvement}
+
+📊 RINCIAN NILAI PER KRITERIA:
+${detailRows}
+-----------------------------------------
+*Penilaian berdasarkan pedoman konvensi (SS/OSR/QCC/QCP)
+Tanggal: ${new Date().toLocaleDateString()}
+`;
+    // copy atau download
+    const blob = new Blob([summary], {type: 'text/plain'});
+    const a = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    a.href = url;
+    a.download = `Penilaian_Conim_${peserta.replace(/\s/g, '_')}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    alert('Ringkasan penilaian sudah diunduh (file .txt)');
+  }
+
+  // inisialisasi
+  renderTable();
+  document.getElementById('resetBtn').addEventListener('click', resetScores);
+  document.getElementById('exportBtn').addEventListener('click', exportSummary);
+  // optional: update total jika juri mengubah manual select sudah pakai event listener
+</script>
+</body>
+</html>
