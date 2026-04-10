@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>PDCARP - PENILAIAN LOMBA</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0/dist/chartjs-plugin-datalabels.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -319,6 +320,58 @@
             word-break: break-word;
         }
 
+        .riwayat-card {
+            background: #f8fafc;
+            border-radius: 1rem;
+            padding: 0.8rem;
+            margin-bottom: 0.8rem;
+            border-left: 4px solid #f59e0b;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        .riwayat-header {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.3rem;
+            border-bottom: 1px solid #e2e8f0;
+            gap: 0.5rem;
+        }
+        .riwayat-peserta {
+            font-weight: bold;
+            color: #1e293b;
+        }
+        .riwayat-juri {
+            background: #e0e7ff;
+            padding: 0.2rem 0.6rem;
+            border-radius: 1rem;
+            font-size: 0.65rem;
+        }
+        .riwayat-detail {
+            font-size: 0.7rem;
+            color: #475569;
+        }
+        .riwayat-total {
+            font-weight: bold;
+            color: #3b82f6;
+            margin-top: 0.5rem;
+        }
+        .riwayat-score-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.2rem 0;
+            font-size: 0.7rem;
+            border-bottom: 1px dotted #e2e8f0;
+        }
+        .riwayat-score-item span:first-child {
+            color: #334155;
+        }
+        .riwayat-score-item span:last-child {
+            font-weight: bold;
+            color: #1e293b;
+        }
+
         .kriteria-card {
             background: #ffffff;
             border: 1px solid #e2e8f0;
@@ -495,9 +548,9 @@
             margin-bottom: 1.5rem;
         }
 
-        @media (min-width: 768px) {
+        @media (min-width: 992px) {
             .dashboard-stats {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(3, 1fr);
                 gap: 1.5rem;
             }
         }
@@ -571,7 +624,7 @@
         }
         
         canvas {
-            max-height: 320px;
+            max-height: 350px;
             width: 100% !important;
         }
 
@@ -592,21 +645,19 @@
             resize: vertical;
         }
 
-        /* Info Peserta Card - LIGHT VERSION */
+        /* Info Peserta Card */
         .info-peserta-card {
             background: #f0f9ff;
             border: 1px solid #bae6fd;
             padding: 0.8rem;
             border-radius: 1rem;
             margin-bottom: 1.2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         .info-peserta-card h4 {
             font-size: 0.65rem;
             color: #0284c7;
             margin-bottom: 0.4rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
         .info-peserta-card .nama {
             font-size: 0.9rem;
@@ -633,10 +684,25 @@
             border-top: 1px dashed #bae6fd;
             word-break: break-word;
         }
-        .info-peserta-card .judul-label {
-            font-size: 0.6rem;
-            color: #64748b;
-            margin-right: 0.3rem;
+
+        /* Filter Riwayat */
+        .filter-group {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        .filter-group .form-group {
+            margin-bottom: 0;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .riwayat-container {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
         }
     </style>
 </head>
@@ -702,7 +768,7 @@
             <div id="kriteriaListMgmt" class="card-list"></div>
         </div>
 
-        <!-- FORM INPUT PANEL (Hanya Juri yang bisa submit, Admin hanya lihat) -->
+        <!-- FORM INPUT PANEL -->
         <div id="formPanel" class="panel">
             <h2>📝 FORM PENILAIAN</h2>
             <div id="formAlert"></div>
@@ -716,7 +782,7 @@
             <div id="hasilPenilaian" style="margin-top: 1.2rem;"></div>
         </div>
 
-        <!-- DASHBOARD PANEL (Admin Only) -->
+        <!-- DASHBOARD PANEL (dengan riwayat di dalamnya) -->
         <div id="dashboardPanel" class="panel">
             <h2>📊 DASHBOARD PENILAIAN</h2>
             <div class="dashboard-stats">
@@ -728,12 +794,28 @@
                     <h4>🏆 RANKING PESERTA</h4>
                     <div id="scoreCardList"></div>
                 </div>
+                <div class="stat-card">
+                    <h4>📜 RIWAYAT PENILAIAN</h4>
+                    <div class="filter-group">
+                        <div class="form-group">
+                            <label>FILTER PESERTA</label>
+                            <select id="filterPesertaRiwayat">
+                                <option value="">SEMUA PESERTA</option>
+                            </select>
+                        </div>
+                        <button class="btn-primary" id="resetFilterBtn" style="background:#64748b; padding:0.5rem 1rem;">RESET</button>
+                    </div>
+                    <div id="riwayatList" class="riwayat-container"></div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+    // Register Chart.js datalabels plugin
+    Chart.register(ChartDataLabels);
+    
     // ======================= DEFAULT KRITERIA =======================
     const DEFAULT_KRITERIA = [
         { id:1001, kode:"1A", nama:"IDENTIFIKASI MASALAH & PENENTUAN TEMA", 
@@ -804,6 +886,37 @@
             { id: 8003, nama: "TIM QCP MAJU", channel: "QCP", judulConim: "IMPLEMENTASI TOTAL QUALITY MANAGEMENT DI LINI PRODUKSI" }
         ];
         if(kriteriaData.length === 0) kriteriaData = JSON.parse(JSON.stringify(DEFAULT_KRITERIA));
+        
+        // Dummy penilaian
+        if(penilaianData.length === 0) {
+            penilaianData = [
+                { id: 7001, pesertaId: 8001, juriId: 9001, tanggal: "2024-01-15 10:30:00", nilaiPerKriteria: [
+                    { kriteriaId: 1001, nilai: 8 }, { kriteriaId: 1002, nilai: 7 }, { kriteriaId: 1003, nilai: 8 },
+                    { kriteriaId: 1004, nilai: 7 }, { kriteriaId: 1005, nilai: 8 }, { kriteriaId: 1006, nilai: 7 },
+                    { kriteriaId: 1007, nilai: 8 }, { kriteriaId: 1008, nilai: 7 }, { kriteriaId: 1009, nilai: 8 }
+                ]},
+                { id: 7002, pesertaId: 8001, juriId: 9002, tanggal: "2024-01-15 11:00:00", nilaiPerKriteria: [
+                    { kriteriaId: 1001, nilai: 9 }, { kriteriaId: 1002, nilai: 8 }, { kriteriaId: 1003, nilai: 9 },
+                    { kriteriaId: 1004, nilai: 8 }, { kriteriaId: 1005, nilai: 9 }, { kriteriaId: 1006, nilai: 8 },
+                    { kriteriaId: 1007, nilai: 9 }, { kriteriaId: 1008, nilai: 8 }, { kriteriaId: 1009, nilai: 9 }
+                ]},
+                { id: 7003, pesertaId: 8002, juriId: 9001, tanggal: "2024-01-15 09:00:00", nilaiPerKriteria: [
+                    { kriteriaId: 1001, nilai: 7 }, { kriteriaId: 1002, nilai: 6 }, { kriteriaId: 1003, nilai: 7 },
+                    { kriteriaId: 1004, nilai: 6 }, { kriteriaId: 1005, nilai: 7 }, { kriteriaId: 1006, nilai: 6 },
+                    { kriteriaId: 1007, nilai: 7 }, { kriteriaId: 1008, nilai: 6 }, { kriteriaId: 1009, nilai: 7 }
+                ]},
+                { id: 7004, pesertaId: 8002, juriId: 9003, tanggal: "2024-01-15 09:30:00", nilaiPerKriteria: [
+                    { kriteriaId: 1001, nilai: 8 }, { kriteriaId: 1002, nilai: 7 }, { kriteriaId: 1003, nilai: 8 },
+                    { kriteriaId: 1004, nilai: 7 }, { kriteriaId: 1005, nilai: 8 }, { kriteriaId: 1006, nilai: 7 },
+                    { kriteriaId: 1007, nilai: 8 }, { kriteriaId: 1008, nilai: 7 }, { kriteriaId: 1009, nilai: 8 }
+                ]},
+                { id: 7005, pesertaId: 8003, juriId: 9002, tanggal: "2024-01-15 13:00:00", nilaiPerKriteria: [
+                    { kriteriaId: 1001, nilai: 9 }, { kriteriaId: 1002, nilai: 9 }, { kriteriaId: 1003, nilai: 9 },
+                    { kriteriaId: 1004, nilai: 8 }, { kriteriaId: 1005, nilai: 9 }, { kriteriaId: 1006, nilai: 8 },
+                    { kriteriaId: 1007, nilai: 9 }, { kriteriaId: 1008, nilai: 8 }, { kriteriaId: 1009, nilai: 9 }
+                ]}
+            ];
+        }
         saveAll();
     }
 
@@ -835,7 +948,7 @@
                 <h4>📋 INFO PESERTA</h4>
                 <div class="nama">🏷️ ${peserta.nama}</div>
                 <div class="channel">📡 CHANNEL: ${peserta.channel}</div>
-                <div class="judul"><span class="judul-label">💡 JUDUL IMPROVEMENT:</span> ${peserta.judulConim}</div>
+                <div class="judul"><span>💡 JUDUL IMPROVEMENT:</span> ${peserta.judulConim}</div>
             `;
             infoDiv.style.display = 'block';
         } else {
@@ -855,6 +968,12 @@
         }
         renderDropdownPeserta();
         renderDashboard();
+        renderRiwayat();
+        
+        const filterPeserta = document.getElementById('filterPesertaRiwayat');
+        if(filterPeserta) {
+            filterPeserta.innerHTML = '<option value="">SEMUA PESERTA</option>' + pesertaData.map(p => `<option value="${p.id}">${p.nama} (${p.channel})</option>`).join('');
+        }
     }
 
     function renderDropdownPeserta() {
@@ -906,7 +1025,7 @@
             }
             return `
                 <div class="kriteria-card">
-                    <div class="kriteria-header">[${k.kode || ''}] ${k.nama.toUpperCase()} (MAX: ${k.bobot})</div>
+                    <div class="kriteria-header">[${k.kode || ''}] ${k.nama.toUpperCase()}</div>
                     <div class="rubrik-grid">
                         <div class="rubrik-item rubrik-kurang"><div class="rubrik-title">🔴 KURANG (1-4)</div><div class="rubrik-desc">${k.descKurang || '-'}</div></div>
                         <div class="rubrik-item rubrik-cukup"><div class="rubrik-title">🟠 CUKUP (5-6)</div><div class="rubrik-desc">${k.descCukup || '-'}</div></div>
@@ -977,6 +1096,7 @@
         resetFormPenilaian();
         tampilkanHasilPenilaian(parseInt(pesertaId));
         renderDashboard();
+        renderRiwayat();
         renderDropdownPeserta();
         document.getElementById('infoPeserta').style.display = 'none';
         document.getElementById('dropdownPeserta').value = '';
@@ -993,16 +1113,71 @@
         if(data.length === 0) { container.innerHTML = `<div class="card-item">BELUM ADA PENILAIAN UNTUK PESERTA INI</div>`; return; }
         let html = `<h3 style="font-size:0.85rem;">📋 RIWAYAT PENILAIAN: ${peserta.nama}</h3>`;
         data.slice().reverse().forEach((pen, idx) => {
-            let total = 0, detail = '<ul style="margin-left:1rem; font-size:0.65rem;">';
+            let total = 0, detail = '<div style="margin-top:0.5rem;">';
             pen.nilaiPerKriteria.forEach(nk => {
                 const k = kriteriaData.find(kr => kr.id === nk.kriteriaId);
-                detail += `<li>${k ? `[${k.kode}] ${k.nama.substring(0,30)}` : `ID:${nk.kriteriaId}`}: ${nk.nilai} / ${k?.bobot||10}</li>`;
                 total += nk.nilai;
+                detail += `<div class="riwayat-score-item"><span>${k ? `[${k.kode}] ${k.nama.substring(0,35)}` : `ID:${nk.kriteriaId}`}</span><span>${nk.nilai}</span></div>`;
             });
             const juri = pen.juriId ? juriData.find(j => j.id === pen.juriId) : null;
-            detail += `</ul><strong>TOTAL SKOR: ${total}</strong><br><small>👨‍⚖️ ${juri ? juri.nama : 'ADMIN'} | 📅 ${pen.tanggal}</small>`;
-            html += `<div class="card-item" style="flex-direction:column; align-items:flex-start; margin-top:0.5rem;">PENILAIAN #${data.length - idx}<br>${detail}</div>`;
+            detail += `</div><div class="riwayat-total">🏆 TOTAL: ${total}</div><small>👨‍⚖️ ${juri ? juri.nama : 'TANPA JURI'} | 📅 ${pen.tanggal}</small>`;
+            html += `<div class="riwayat-card" style="margin-top:0.5rem;">PENILAIAN #${data.length - idx}<br>${detail}</div>`;
         });
+        container.innerHTML = html;
+    }
+
+    function renderRiwayat() {
+        const container = document.getElementById('riwayatList');
+        if(!container) return;
+        
+        const filterPesertaId = document.getElementById('filterPesertaRiwayat')?.value;
+        
+        let data = [...penilaianData];
+        
+        // Filter berdasarkan role
+        if(currentUser.role === 'juri' && currentUser.juriId) {
+            data = data.filter(p => p.juriId === currentUser.juriId);
+        }
+        
+        if(filterPesertaId) {
+            data = data.filter(p => p.pesertaId === parseInt(filterPesertaId));
+        }
+        
+        if(data.length === 0) {
+            container.innerHTML = '<div class="card-item">BELUM ADA DATA PENILAIAN</div>';
+            return;
+        }
+        
+        // Urutkan dari yang terbaru
+        data.sort((a,b) => b.id - a.id);
+        
+        const html = data.map(pen => {
+            const peserta = pesertaData.find(p => p.id === pen.pesertaId);
+            const juri = pen.juriId ? juriData.find(j => j.id === pen.juriId) : null;
+            let total = 0;
+            let detail = '<div style="margin-top:0.5rem;">';
+            pen.nilaiPerKriteria.forEach(nk => {
+                const k = kriteriaData.find(kr => kr.id === nk.kriteriaId);
+                total += nk.nilai;
+                detail += `<div class="riwayat-score-item"><span>${k ? `[${k.kode}] ${k.nama.substring(0,35)}` : 'Kriteria'}</span><span>${nk.nilai}</span></div>`;
+            });
+            detail += `</div>`;
+            
+            return `
+                <div class="riwayat-card">
+                    <div class="riwayat-header">
+                        <span class="riwayat-peserta">📌 ${peserta?.nama || 'Unknown'} (${peserta?.channel || '-'})</span>
+                        <span class="riwayat-juri">👨‍⚖️ ${juri ? juri.nama : 'TANPA JURI'}</span>
+                    </div>
+                    <div class="riwayat-detail">
+                        📅 ${pen.tanggal}
+                        ${detail}
+                        <div class="riwayat-total">🏆 TOTAL SKOR: ${total}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
         container.innerHTML = html;
     }
 
@@ -1061,7 +1236,7 @@
         }).join('');
         document.getElementById('scoreCardList').innerHTML = scoreCardHtml || '<div class="card-item">BELUM ADA PENILAIAN</div>';
         
-        // Buat stacked bar chart
+        // Buat stacked bar chart dengan label nilai
         const juriNames = [...new Set(juriData.map(j => j.nama))];
         const warnaJuri = ['#3b82f6', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6', '#ec489a', '#06b6d4', '#84cc16'];
         
@@ -1072,7 +1247,19 @@
                 backgroundColor: warnaJuri[idx % warnaJuri.length],
                 borderRadius: 4,
                 borderWidth: 0,
-                stack: 'stack0'
+                stack: 'stack0',
+                datalabels: {
+                    anchor: 'center',
+                    align: 'center',
+                    offset: 0,
+                    formatter: (value) => {
+                        if (value === 0) return '';
+                        return value;
+                    },
+                    color: 'white',
+                    fontWeight: 'bold',
+                    font: { size: 10 }
+                }
             };
         });
         
@@ -1087,6 +1274,9 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: true,
+                layout: {
+                    padding: { top: 20, bottom: 10 }
+                },
                 plugins: {
                     legend: { 
                         position: 'top', 
@@ -1103,6 +1293,18 @@
                                 return `Total: ${sum}`;
                             }
                         } 
+                    },
+                    datalabels: {
+                        anchor: 'center',
+                        align: 'center',
+                        offset: 0,
+                        formatter: (value) => {
+                            if (value === 0) return '';
+                            return value;
+                        },
+                        color: 'white',
+                        fontWeight: 'bold',
+                        font: { size: 10 }
                     }
                 },
                 scales: {
@@ -1127,6 +1329,7 @@
         saveAll(); 
         renderJuri(); 
         renderDashboard();
+        renderRiwayat();
         renderDropdownPeserta();
     };
     window.hapusPeserta = function(id) { 
@@ -1136,6 +1339,7 @@
         renderPeserta(); 
         document.getElementById('hasilPenilaian').innerHTML=''; 
         renderDashboard();
+        renderRiwayat();
         renderDropdownPeserta();
     };
     window.hapusKriteria = function(id) { 
@@ -1198,6 +1402,7 @@
         renderKriteriaMgmt();
         renderFormKriteriaNilai();
         renderDashboard();
+        renderRiwayat();
         renderDropdownPeserta();
         
         const submitBtn = document.getElementById('submitPenilaianBtn');
@@ -1228,6 +1433,7 @@
             `;
         } else {
             container.innerHTML = `
+                <button class="nav-btn" data-nav="dashboard">📊 DASHBOARD</button>
                 <button class="nav-btn" data-nav="form">📝 FORM INPUT</button>
                 <div class="user-section">
                     <span class="user-info">👨‍⚖️ ${currentUser.username}</span>
@@ -1240,7 +1446,7 @@
         const panels = { 
             dashboard: document.getElementById('dashboardPanel'), 
             form: document.getElementById('formPanel'), 
-            management: document.getElementById('managementPanel') 
+            management: document.getElementById('managementPanel')
         };
         btns.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -1254,7 +1460,7 @@
                     
                     if(btn.dataset.nav === 'management') { renderJuri(); renderPeserta(); renderKriteriaMgmt(); }
                     if(btn.dataset.nav === 'form') { renderFormKriteriaNilai(); renderPeserta(); resetFormPenilaian(); }
-                    if(btn.dataset.nav === 'dashboard') { renderDashboard(); }
+                    if(btn.dataset.nav === 'dashboard') { renderDashboard(); renderRiwayat(); }
                 }
             });
         });
@@ -1291,13 +1497,13 @@
     
     document.getElementById('addJuriBtn')?.addEventListener('click', () => {
         let n = document.getElementById('juriName').value.trim();
-        if(n) { juriData.push({id:Date.now(), nama:n.toUpperCase()}); saveAll(); renderJuri(); renderDashboard(); document.getElementById('juriName').value = ''; }
+        if(n) { juriData.push({id:Date.now(), nama:n.toUpperCase()}); saveAll(); renderJuri(); renderDashboard(); renderRiwayat(); document.getElementById('juriName').value = ''; }
     });
     document.getElementById('addPesertaBtn')?.addEventListener('click', () => {
         let n = document.getElementById('pesertaName').value.trim();
         let c = document.getElementById('channelSelect').value;
         let j = document.getElementById('judulConim').value.trim();
-        if(n && j) { pesertaData.push({id:Date.now(), nama:n.toUpperCase(), channel:c, judulConim:j.toUpperCase()}); saveAll(); renderPeserta(); document.getElementById('pesertaName').value=''; document.getElementById('judulConim').value=''; renderDashboard(); }
+        if(n && j) { pesertaData.push({id:Date.now(), nama:n.toUpperCase(), channel:c, judulConim:j.toUpperCase()}); saveAll(); renderPeserta(); document.getElementById('pesertaName').value=''; document.getElementById('judulConim').value=''; renderDashboard(); renderRiwayat(); }
     });
     document.getElementById('addKriteriaBtn')?.addEventListener('click', () => {
         let nama = document.getElementById('kriteriaName').value.trim().toUpperCase();
@@ -1330,6 +1536,12 @@
             document.getElementById('hasilPenilaian').innerHTML = '';
         }
         resetFormPenilaian();
+    });
+    
+    document.getElementById('filterPesertaRiwayat')?.addEventListener('change', () => renderRiwayat());
+    document.getElementById('resetFilterBtn')?.addEventListener('click', () => {
+        document.getElementById('filterPesertaRiwayat').value = '';
+        renderRiwayat();
     });
     
     loadData();
