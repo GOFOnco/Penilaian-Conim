@@ -545,8 +545,33 @@
             margin-right: 0.3rem;
         }
         
+        .juri-scores {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.4rem;
+        }
+        
+        .juri-score-item {
+            background: #f1f5f9;
+            border-radius: 1rem;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.6rem;
+            font-weight: 600;
+        }
+        
+        .juri-score-item span:first-child {
+            color: #475569;
+        }
+        
+        .juri-score-item span:last-child {
+            color: #3b82f6;
+            font-weight: bold;
+            margin-left: 0.2rem;
+        }
+        
         canvas {
-            max-height: 280px;
+            max-height: 320px;
             width: 100% !important;
         }
 
@@ -696,7 +721,7 @@
             <h2>📊 DASHBOARD PENILAIAN</h2>
             <div class="dashboard-stats">
                 <div class="stat-card">
-                    <h4>📊 TOTAL SKOR PER PESERTA (TERTINGGI KE TERENDAH)</h4>
+                    <h4>📊 TOTAL SKOR PER PESERTA (STACKED BAR)</h4>
                     <canvas id="scoreChart" width="400" height="300"></canvas>
                 </div>
                 <div class="stat-card">
@@ -987,59 +1012,110 @@
             return;
         }
         
+        // Hitung total skor dan skor per juri untuk setiap peserta
         const pesertaScores = pesertaData.map(p => {
             const penilaianPeserta = penilaianData.filter(pen => pen.pesertaId === p.id);
             let totalSkor = 0;
+            let skorPerJuri = {};
+            
             penilaianPeserta.forEach(pen => {
                 const totalNilai = pen.nilaiPerKriteria.reduce((sum, nk) => sum + nk.nilai, 0);
                 totalSkor += totalNilai;
+                
+                const juri = juriData.find(j => j.id === pen.juriId);
+                const juriNama = juri ? juri.nama : 'Tanpa Juri';
+                if (!skorPerJuri[juriNama]) {
+                    skorPerJuri[juriNama] = 0;
+                }
+                skorPerJuri[juriNama] += totalNilai;
             });
+            
             return {
                 id: p.id,
                 nama: p.nama,
                 channel: p.channel,
                 judul: p.judulConim,
                 totalSkor: totalSkor,
+                skorPerJuri: skorPerJuri,
                 jumlahPenilaian: penilaianPeserta.length
             };
         });
         
+        // Urutkan dari total skor tertinggi ke terendah
         pesertaScores.sort((a,b) => b.totalSkor - a.totalSkor);
         
-        const scoreCardHtml = pesertaScores.map((ps, rank) => `
-            <div class="peserta-score-card">
-                <div class="peserta-name">${rank+1}. ${ps.nama} (${ps.channel})</div>
-                <div style="font-size:0.65rem; color:#475569; margin-bottom:0.3rem; word-break:break-word;">📌 ${ps.judul.substring(0,80)}${ps.judul.length>80?'...':''}</div>
-                <div><span class="score-badge">🏆 TOTAL SKOR: ${ps.totalSkor}</span> <span class="score-badge" style="background:#64748b">📊 ${ps.jumlahPenilaian} X PENILAIAN</span></div>
-            </div>
-        `).join('');
+        // Buat ranking card dengan menampilkan skor masing-masing juri
+        const scoreCardHtml = pesertaScores.map((ps, rank) => {
+            const juriScoreItems = Object.entries(ps.skorPerJuri).map(([juriNama, skor]) => 
+                `<div class="juri-score-item"><span>${juriNama}:</span><span>${skor}</span></div>`
+            ).join('');
+            
+            return `
+                <div class="peserta-score-card">
+                    <div class="peserta-name">${rank+1}. ${ps.nama} (${ps.channel})</div>
+                    <div style="font-size:0.65rem; color:#475569; margin-bottom:0.3rem; word-break:break-word;">📌 ${ps.judul.substring(0,80)}${ps.judul.length>80?'...':''}</div>
+                    <div><span class="score-badge">🏆 TOTAL SKOR: ${ps.totalSkor}</span></div>
+                    <div class="juri-scores">${juriScoreItems}</div>
+                </div>
+            `;
+        }).join('');
         document.getElementById('scoreCardList').innerHTML = scoreCardHtml || '<div class="card-item">BELUM ADA PENILAIAN</div>';
+        
+        // Buat stacked bar chart
+        const juriNames = [...new Set(juriData.map(j => j.nama))];
+        const warnaJuri = ['#3b82f6', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6', '#ec489a', '#06b6d4', '#84cc16'];
+        
+        const datasets = juriNames.map((juriNama, idx) => {
+            return {
+                label: juriNama,
+                data: pesertaScores.map(ps => ps.skorPerJuri[juriNama] || 0),
+                backgroundColor: warnaJuri[idx % warnaJuri.length],
+                borderRadius: 4,
+                borderWidth: 0,
+                stack: 'stack0'
+            };
+        });
         
         const ctx = document.getElementById('scoreChart').getContext('2d');
         if(window.scoreChartInstance) window.scoreChartInstance.destroy();
         window.scoreChartInstance = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: pesertaScores.map(ps => ps.nama.length > 15 ? ps.nama.substring(0,12)+'...' : ps.nama),
-                datasets: [{
-                    label: 'TOTAL SKOR',
-                    data: pesertaScores.map(ps => ps.totalSkor),
-                    backgroundColor: '#3b82f6',
-                    borderRadius: 8,
-                    borderColor: '#2563eb',
-                    borderWidth: 1
-                }]
+                labels: pesertaScores.map(ps => ps.nama.length > 12 ? ps.nama.substring(0,10)+'...' : ps.nama),
+                datasets: datasets
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: true,
                 plugins: {
-                    legend: { position: 'top', labels: { font: { size: 10 } } },
-                    tooltip: { callbacks: { label: (ctx) => `TOTAL SKOR: ${ctx.raw}` } }
+                    legend: { 
+                        position: 'top', 
+                        labels: { font: { size: 10 }, boxWidth: 12 } 
+                    },
+                    tooltip: { 
+                        callbacks: { 
+                            label: (ctx) => `${ctx.dataset.label}: ${ctx.raw}`,
+                            footer: (tooltipItems) => {
+                                let sum = 0;
+                                tooltipItems.forEach(item => {
+                                    sum += item.raw;
+                                });
+                                return `Total: ${sum}`;
+                            }
+                        } 
+                    }
                 },
                 scales: {
-                    y: { beginAtZero: true, title: { display: true, text: 'TOTAL SKOR', font: { size: 10 } } },
-                    x: { title: { display: true, text: 'PESERTA', font: { size: 10 } }, ticks: { font: { size: 9 } } }
+                    x: { 
+                        stacked: true,
+                        title: { display: true, text: 'PESERTA', font: { size: 10 } },
+                        ticks: { font: { size: 9 } }
+                    },
+                    y: { 
+                        stacked: true,
+                        beginAtZero: true, 
+                        title: { display: true, text: 'TOTAL SKOR', font: { size: 10 } } 
+                    }
                 }
             }
         });
@@ -1183,11 +1259,9 @@
             });
         });
         
-        // Set active first button
         const firstBtn = container.querySelector('.nav-btn');
         if(firstBtn) firstBtn.click();
         
-        // Attach logout event
         const logoutNavBtn = document.getElementById('logoutBtnNav');
         if(logoutNavBtn) {
             logoutNavBtn.addEventListener('click', logout);
