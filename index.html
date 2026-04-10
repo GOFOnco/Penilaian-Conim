@@ -79,41 +79,6 @@
             font-size: 0.8rem;
         }
 
-        /* LOGOUT BUTTON - ICON ONLY */
-        .logout-btn {
-            position: fixed;
-            top: 16px;
-            right: 16px;
-            background: #ef4444;
-            color: white;
-            border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            z-index: 100;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-        .logout-btn:hover {
-            background: #dc2626;
-            transform: scale(1.05);
-        }
-
-        @media (min-width: 768px) {
-            .logout-btn {
-                top: 20px;
-                right: 20px;
-                width: 48px;
-                height: 48px;
-                font-size: 1.5rem;
-            }
-        }
-
         .navbar {
             background: white;
             border-radius: 2rem;
@@ -124,6 +89,7 @@
             margin-bottom: 1.5rem;
             flex-wrap: wrap;
             justify-content: center;
+            align-items: center;
         }
 
         @media (min-width: 640px) {
@@ -160,6 +126,63 @@
         .nav-btn.active {
             background: #3b82f6;
             color: white;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-left: auto;
+            background: #e0e7ff;
+            padding: 0.3rem 0.8rem 0.3rem 1rem;
+            border-radius: 2rem;
+        }
+
+        @media (max-width: 480px) {
+            .user-section {
+                padding: 0.2rem 0.6rem 0.2rem 0.8rem;
+            }
+        }
+
+        .user-info {
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: #1e40af;
+            white-space: nowrap;
+        }
+
+        @media (min-width: 640px) {
+            .user-info {
+                font-size: 0.8rem;
+            }
+        }
+
+        .logout-icon {
+            background: #ef4444;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .logout-icon:hover {
+            background: #dc2626;
+            transform: scale(1.05);
+        }
+
+        @media (min-width: 640px) {
+            .logout-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 1.1rem;
+            }
         }
 
         .panel {
@@ -544,23 +567,6 @@
             resize: vertical;
         }
 
-        .user-info {
-            background: #e0e7ff;
-            padding: 0.4rem 0.8rem;
-            border-radius: 2rem;
-            font-size: 0.7rem;
-            font-weight: bold;
-            margin-left: auto;
-            white-space: nowrap;
-        }
-
-        @media (max-width: 480px) {
-            .user-info {
-                font-size: 0.6rem;
-                padding: 0.3rem 0.6rem;
-            }
-        }
-
         /* Info Peserta Card - LIGHT VERSION */
         .info-peserta-card {
             background: #f0f9ff;
@@ -624,7 +630,6 @@
 </div>
 
 <div id="appContent" style="display: none;">
-    <button class="logout-btn" id="logoutBtn">🚪</button>
     <div class="container">
         <div class="navbar" id="navbarContainer"></div>
 
@@ -1140,12 +1145,18 @@
                 <button class="nav-btn" data-nav="dashboard">📊 DASHBOARD</button>
                 <button class="nav-btn" data-nav="form">📝 FORM INPUT</button>
                 <button class="nav-btn" data-nav="management">⚙️ MANAGEMENT</button>
-                <div class="user-info">👑 ADMIN: ${currentUser.username}</div>
+                <div class="user-section">
+                    <span class="user-info">👑 ${currentUser.username}</span>
+                    <button class="logout-icon" id="logoutBtnNav">🚪</button>
+                </div>
             `;
         } else {
             container.innerHTML = `
                 <button class="nav-btn" data-nav="form">📝 FORM INPUT</button>
-                <div class="user-info">👨‍⚖️ JURI: ${currentUser.username}</div>
+                <div class="user-section">
+                    <span class="user-info">👨‍⚖️ ${currentUser.username}</span>
+                    <button class="logout-icon" id="logoutBtnNav">🚪</button>
+                </div>
             `;
         }
         
@@ -1171,8 +1182,16 @@
                 }
             });
         });
+        
+        // Set active first button
         const firstBtn = container.querySelector('.nav-btn');
         if(firstBtn) firstBtn.click();
+        
+        // Attach logout event
+        const logoutNavBtn = document.getElementById('logoutBtnNav');
+        if(logoutNavBtn) {
+            logoutNavBtn.addEventListener('click', logout);
+        }
     }
 
     function logout() {
@@ -1195,7 +1214,6 @@
     document.getElementById('loginUsername')?.addEventListener('keypress', (e) => {
         if(e.key === 'Enter') document.getElementById('loginBtn').click();
     });
-    document.getElementById('logoutBtn')?.addEventListener('click', logout);
     
     document.getElementById('addJuriBtn')?.addEventListener('click', () => {
         let n = document.getElementById('juriName').value.trim();
