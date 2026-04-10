@@ -550,7 +550,7 @@
 
         @media (min-width: 992px) {
             .dashboard-stats {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(2, 1fr);
                 gap: 1.5rem;
             }
         }
@@ -685,24 +685,20 @@
             word-break: break-word;
         }
 
-        /* Filter Riwayat */
-        .filter-group {
-            margin-bottom: 1rem;
-            display: flex;
-            gap: 0.8rem;
-            flex-wrap: wrap;
-            align-items: flex-end;
-        }
-        .filter-group .form-group {
-            margin-bottom: 0;
-            flex: 1;
-            min-width: 150px;
-        }
-
         .riwayat-container {
-            max-height: 500px;
+            max-height: 400px;
             overflow-y: auto;
             padding-right: 0.5rem;
+        }
+
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #1e293b;
+            margin: 1rem 0 0.8rem 0;
+            padding-bottom: 0.3rem;
+            border-bottom: 2px solid #f59e0b;
+            display: inline-block;
         }
     </style>
 </head>
@@ -768,7 +764,7 @@
             <div id="kriteriaListMgmt" class="card-list"></div>
         </div>
 
-        <!-- FORM INPUT PANEL -->
+        <!-- FORM INPUT PANEL (Juri & Admin bisa akses) -->
         <div id="formPanel" class="panel">
             <h2>📝 FORM PENILAIAN</h2>
             <div id="formAlert"></div>
@@ -779,10 +775,13 @@
             <div id="infoPeserta" class="info-peserta-card" style="display:none;"></div>
             <div id="dynamicKriteriaNilai"></div>
             <button class="btn-primary" id="submitPenilaianBtn" style="margin-top:1rem; width:100%; display:none;">✅ SUBMIT PENILAIAN</button>
-            <div id="hasilPenilaian" style="margin-top: 1.2rem;"></div>
+            
+            <!-- Riwayat Penilaian (untuk Juri & Admin) -->
+            <div class="section-title">📜 RIWAYAT PENILAIAN</div>
+            <div id="riwayatPenilaian" class="riwayat-container"></div>
         </div>
 
-        <!-- DASHBOARD PANEL (dengan riwayat di dalamnya) -->
+        <!-- DASHBOARD PANEL (Admin Only) -->
         <div id="dashboardPanel" class="panel">
             <h2>📊 DASHBOARD PENILAIAN</h2>
             <div class="dashboard-stats">
@@ -794,19 +793,25 @@
                     <h4>🏆 RANKING PESERTA</h4>
                     <div id="scoreCardList"></div>
                 </div>
-                <div class="stat-card">
-                    <h4>📜 RIWAYAT PENILAIAN</h4>
-                    <div class="filter-group">
-                        <div class="form-group">
-                            <label>FILTER PESERTA</label>
-                            <select id="filterPesertaRiwayat">
-                                <option value="">SEMUA PESERTA</option>
-                            </select>
-                        </div>
-                        <button class="btn-primary" id="resetFilterBtn" style="background:#64748b; padding:0.5rem 1rem;">RESET</button>
+            </div>
+            <div class="stat-card" style="margin-top:1rem;">
+                <h4>📜 RIWAYAT SEMUA PENILAIAN</h4>
+                <div class="filter-group" style="display:flex; gap:0.8rem; flex-wrap:wrap; margin-bottom:1rem;">
+                    <div class="form-group" style="margin-bottom:0; flex:1;">
+                        <label>FILTER PESERTA</label>
+                        <select id="filterPesertaRiwayat">
+                            <option value="">SEMUA PESERTA</option>
+                        </select>
                     </div>
-                    <div id="riwayatList" class="riwayat-container"></div>
+                    <div class="form-group" style="margin-bottom:0; flex:1;">
+                        <label>FILTER JURI</label>
+                        <select id="filterJuriRiwayat">
+                            <option value="">SEMUA JURI</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary" id="resetFilterBtn" style="background:#64748b; margin-top:1.5rem;">RESET</button>
                 </div>
+                <div id="riwayatAll" class="riwayat-container"></div>
             </div>
         </div>
     </div>
@@ -887,7 +892,6 @@
         ];
         if(kriteriaData.length === 0) kriteriaData = JSON.parse(JSON.stringify(DEFAULT_KRITERIA));
         
-        // Dummy penilaian
         if(penilaianData.length === 0) {
             penilaianData = [
                 { id: 7001, pesertaId: 8001, juriId: 9001, tanggal: "2024-01-15 10:30:00", nilaiPerKriteria: [
@@ -959,6 +963,11 @@
     function renderJuri() {
         const container = document.getElementById('juriList');
         if(container) container.innerHTML = juriData.length ? juriData.map(j => `<div class="card-item"><span>👨‍⚖️ ${j.nama}</span><button class="btn-danger" onclick="hapusJuri(${j.id})">HAPUS</button></div>`).join('') : '<div class="card-item">BELUM ADA JURI</div>';
+        
+        const filterJuri = document.getElementById('filterJuriRiwayat');
+        if(filterJuri) {
+            filterJuri.innerHTML = '<option value="">SEMUA JURI</option>' + juriData.map(j => `<option value="${j.id}">${j.nama}</option>`).join('');
+        }
     }
 
     function renderPeserta() {
@@ -968,7 +977,8 @@
         }
         renderDropdownPeserta();
         renderDashboard();
-        renderRiwayat();
+        renderRiwayatForm();
+        renderRiwayatAll();
         
         const filterPeserta = document.getElementById('filterPesertaRiwayat');
         if(filterPeserta) {
@@ -1096,7 +1106,8 @@
         resetFormPenilaian();
         tampilkanHasilPenilaian(parseInt(pesertaId));
         renderDashboard();
-        renderRiwayat();
+        renderRiwayatForm();
+        renderRiwayatAll();
         renderDropdownPeserta();
         document.getElementById('infoPeserta').style.display = 'none';
         document.getElementById('dropdownPeserta').value = '';
@@ -1126,11 +1137,9 @@
         container.innerHTML = html;
     }
 
-    function renderRiwayat() {
-        const container = document.getElementById('riwayatList');
+    function renderRiwayatForm() {
+        const container = document.getElementById('riwayatPenilaian');
         if(!container) return;
-        
-        const filterPesertaId = document.getElementById('filterPesertaRiwayat')?.value;
         
         let data = [...penilaianData];
         
@@ -1139,8 +1148,57 @@
             data = data.filter(p => p.juriId === currentUser.juriId);
         }
         
+        if(data.length === 0) {
+            container.innerHTML = '<div class="card-item">BELUM ADA DATA PENILAIAN</div>';
+            return;
+        }
+        
+        data.sort((a,b) => b.id - a.id);
+        
+        const html = data.map(pen => {
+            const peserta = pesertaData.find(p => p.id === pen.pesertaId);
+            const juri = pen.juriId ? juriData.find(j => j.id === pen.juriId) : null;
+            let total = 0;
+            let detail = '<div style="margin-top:0.5rem;">';
+            pen.nilaiPerKriteria.forEach(nk => {
+                const k = kriteriaData.find(kr => kr.id === nk.kriteriaId);
+                total += nk.nilai;
+                detail += `<div class="riwayat-score-item"><span>${k ? `[${k.kode}] ${k.nama.substring(0,35)}` : 'Kriteria'}</span><span>${nk.nilai}</span></div>`;
+            });
+            detail += `</div>`;
+            
+            return `
+                <div class="riwayat-card">
+                    <div class="riwayat-header">
+                        <span class="riwayat-peserta">📌 ${peserta?.nama || 'Unknown'} (${peserta?.channel || '-'})</span>
+                        <span class="riwayat-juri">👨‍⚖️ ${juri ? juri.nama : 'TANPA JURI'}</span>
+                    </div>
+                    <div class="riwayat-detail">
+                        📅 ${pen.tanggal}
+                        ${detail}
+                        <div class="riwayat-total">🏆 TOTAL SKOR: ${total}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        container.innerHTML = html;
+    }
+
+    function renderRiwayatAll() {
+        const container = document.getElementById('riwayatAll');
+        if(!container) return;
+        
+        const filterPesertaId = document.getElementById('filterPesertaRiwayat')?.value;
+        const filterJuriId = document.getElementById('filterJuriRiwayat')?.value;
+        
+        let data = [...penilaianData];
+        
         if(filterPesertaId) {
             data = data.filter(p => p.pesertaId === parseInt(filterPesertaId));
+        }
+        if(filterJuriId) {
+            data = data.filter(p => p.juriId === parseInt(filterJuriId));
         }
         
         if(data.length === 0) {
@@ -1148,7 +1206,6 @@
             return;
         }
         
-        // Urutkan dari yang terbaru
         data.sort((a,b) => b.id - a.id);
         
         const html = data.map(pen => {
@@ -1187,7 +1244,6 @@
             return;
         }
         
-        // Hitung total skor dan skor per juri untuk setiap peserta
         const pesertaScores = pesertaData.map(p => {
             const penilaianPeserta = penilaianData.filter(pen => pen.pesertaId === p.id);
             let totalSkor = 0;
@@ -1216,10 +1272,8 @@
             };
         });
         
-        // Urutkan dari total skor tertinggi ke terendah
         pesertaScores.sort((a,b) => b.totalSkor - a.totalSkor);
         
-        // Buat ranking card dengan menampilkan skor masing-masing juri
         const scoreCardHtml = pesertaScores.map((ps, rank) => {
             const juriScoreItems = Object.entries(ps.skorPerJuri).map(([juriNama, skor]) => 
                 `<div class="juri-score-item"><span>${juriNama}:</span><span>${skor}</span></div>`
@@ -1236,7 +1290,6 @@
         }).join('');
         document.getElementById('scoreCardList').innerHTML = scoreCardHtml || '<div class="card-item">BELUM ADA PENILAIAN</div>';
         
-        // Buat stacked bar chart dengan label nilai
         const juriNames = [...new Set(juriData.map(j => j.nama))];
         const warnaJuri = ['#3b82f6', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6', '#ec489a', '#06b6d4', '#84cc16'];
         
@@ -1274,22 +1327,15 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: true,
-                layout: {
-                    padding: { top: 20, bottom: 10 }
-                },
+                layout: { padding: { top: 20, bottom: 10 } },
                 plugins: {
-                    legend: { 
-                        position: 'top', 
-                        labels: { font: { size: 10 }, boxWidth: 12 } 
-                    },
+                    legend: { position: 'top', labels: { font: { size: 10 }, boxWidth: 12 } },
                     tooltip: { 
                         callbacks: { 
                             label: (ctx) => `${ctx.dataset.label}: ${ctx.raw}`,
                             footer: (tooltipItems) => {
                                 let sum = 0;
-                                tooltipItems.forEach(item => {
-                                    sum += item.raw;
-                                });
+                                tooltipItems.forEach(item => { sum += item.raw; });
                                 return `Total: ${sum}`;
                             }
                         } 
@@ -1298,26 +1344,15 @@
                         anchor: 'center',
                         align: 'center',
                         offset: 0,
-                        formatter: (value) => {
-                            if (value === 0) return '';
-                            return value;
-                        },
+                        formatter: (value) => value === 0 ? '' : value,
                         color: 'white',
                         fontWeight: 'bold',
                         font: { size: 10 }
                     }
                 },
                 scales: {
-                    x: { 
-                        stacked: true,
-                        title: { display: true, text: 'PESERTA', font: { size: 10 } },
-                        ticks: { font: { size: 9 } }
-                    },
-                    y: { 
-                        stacked: true,
-                        beginAtZero: true, 
-                        title: { display: true, text: 'TOTAL SKOR', font: { size: 10 } } 
-                    }
+                    x: { stacked: true, title: { display: true, text: 'PESERTA', font: { size: 10 } }, ticks: { font: { size: 9 } } },
+                    y: { stacked: true, beginAtZero: true, title: { display: true, text: 'TOTAL SKOR', font: { size: 10 } } }
                 }
             }
         });
@@ -1329,7 +1364,8 @@
         saveAll(); 
         renderJuri(); 
         renderDashboard();
-        renderRiwayat();
+        renderRiwayatForm();
+        renderRiwayatAll();
         renderDropdownPeserta();
     };
     window.hapusPeserta = function(id) { 
@@ -1339,7 +1375,8 @@
         renderPeserta(); 
         document.getElementById('hasilPenilaian').innerHTML=''; 
         renderDashboard();
-        renderRiwayat();
+        renderRiwayatForm();
+        renderRiwayatAll();
         renderDropdownPeserta();
     };
     window.hapusKriteria = function(id) { 
@@ -1402,7 +1439,8 @@
         renderKriteriaMgmt();
         renderFormKriteriaNilai();
         renderDashboard();
-        renderRiwayat();
+        renderRiwayatForm();
+        renderRiwayatAll();
         renderDropdownPeserta();
         
         const submitBtn = document.getElementById('submitPenilaianBtn');
@@ -1433,7 +1471,6 @@
             `;
         } else {
             container.innerHTML = `
-                <button class="nav-btn" data-nav="dashboard">📊 DASHBOARD</button>
                 <button class="nav-btn" data-nav="form">📝 FORM INPUT</button>
                 <div class="user-section">
                     <span class="user-info">👨‍⚖️ ${currentUser.username}</span>
@@ -1459,8 +1496,8 @@
                     btn.classList.add('active');
                     
                     if(btn.dataset.nav === 'management') { renderJuri(); renderPeserta(); renderKriteriaMgmt(); }
-                    if(btn.dataset.nav === 'form') { renderFormKriteriaNilai(); renderPeserta(); resetFormPenilaian(); }
-                    if(btn.dataset.nav === 'dashboard') { renderDashboard(); renderRiwayat(); }
+                    if(btn.dataset.nav === 'form') { renderFormKriteriaNilai(); renderPeserta(); resetFormPenilaian(); renderRiwayatForm(); }
+                    if(btn.dataset.nav === 'dashboard') { renderDashboard(); renderRiwayatAll(); }
                 }
             });
         });
@@ -1497,13 +1534,13 @@
     
     document.getElementById('addJuriBtn')?.addEventListener('click', () => {
         let n = document.getElementById('juriName').value.trim();
-        if(n) { juriData.push({id:Date.now(), nama:n.toUpperCase()}); saveAll(); renderJuri(); renderDashboard(); renderRiwayat(); document.getElementById('juriName').value = ''; }
+        if(n) { juriData.push({id:Date.now(), nama:n.toUpperCase()}); saveAll(); renderJuri(); renderDashboard(); renderRiwayatAll(); document.getElementById('juriName').value = ''; }
     });
     document.getElementById('addPesertaBtn')?.addEventListener('click', () => {
         let n = document.getElementById('pesertaName').value.trim();
         let c = document.getElementById('channelSelect').value;
         let j = document.getElementById('judulConim').value.trim();
-        if(n && j) { pesertaData.push({id:Date.now(), nama:n.toUpperCase(), channel:c, judulConim:j.toUpperCase()}); saveAll(); renderPeserta(); document.getElementById('pesertaName').value=''; document.getElementById('judulConim').value=''; renderDashboard(); renderRiwayat(); }
+        if(n && j) { pesertaData.push({id:Date.now(), nama:n.toUpperCase(), channel:c, judulConim:j.toUpperCase()}); saveAll(); renderPeserta(); document.getElementById('pesertaName').value=''; document.getElementById('judulConim').value=''; renderDashboard(); renderRiwayatAll(); }
     });
     document.getElementById('addKriteriaBtn')?.addEventListener('click', () => {
         let nama = document.getElementById('kriteriaName').value.trim().toUpperCase();
@@ -1538,10 +1575,12 @@
         resetFormPenilaian();
     });
     
-    document.getElementById('filterPesertaRiwayat')?.addEventListener('change', () => renderRiwayat());
+    document.getElementById('filterPesertaRiwayat')?.addEventListener('change', () => renderRiwayatAll());
+    document.getElementById('filterJuriRiwayat')?.addEventListener('change', () => renderRiwayatAll());
     document.getElementById('resetFilterBtn')?.addEventListener('click', () => {
         document.getElementById('filterPesertaRiwayat').value = '';
-        renderRiwayat();
+        document.getElementById('filterJuriRiwayat').value = '';
+        renderRiwayatAll();
     });
     
     loadData();
