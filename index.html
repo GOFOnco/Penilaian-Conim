@@ -150,6 +150,7 @@
             border-left: 6px solid #3b82f6;
             padding-left: 0.8rem;
             font-size: 1.1rem;
+            word-break: break-word;
         }
 
         .form-group {
@@ -244,6 +245,7 @@
             font-size: 0.85rem;
             margin-bottom: 0.8rem;
             color: #1e293b;
+            word-break: break-word;
         }
 
         .rubrik-grid {
@@ -266,6 +268,8 @@
             border-radius: 0.5rem;
             font-size: 0.65rem;
             line-height: 1.4;
+            word-wrap: break-word;
+            white-space: normal;
         }
 
         .rubrik-kurang { background: #fef2f2; border-left: 3px solid #ef4444; }
@@ -273,11 +277,27 @@
         .rubrik-baik { background: #eff6ff; border-left: 3px solid #3b82f6; }
         .rubrik-excellent { background: #ecfdf5; border-left: 3px solid #10b981; }
         
-        .rubrik-title { font-weight: bold; margin-bottom: 0.3rem; font-size: 0.7rem; }
-        .rubrik-desc { color: #475569; font-size: 0.65rem; }
+        .rubrik-title {
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+            font-size: 0.7rem;
+        }
+        
+        .rubrik-desc {
+            color: #475569;
+            font-size: 0.65rem;
+        }
 
-        .rating-wrapper { text-align: center; }
-        .rating-value { font-size: 0.65rem; color: #64748b; margin-bottom: 0.3rem; font-weight: bold; }
+        .rating-wrapper {
+            text-align: center;
+        }
+        
+        .rating-value {
+            font-size: 0.65rem;
+            color: #64748b;
+            margin-bottom: 0.3rem;
+            font-weight: bold;
+        }
         
         .rating-circles {
             display: flex;
@@ -303,10 +323,17 @@
         }
 
         @media (min-width: 640px) {
-            .circle { width: 38px; height: 38px; font-size: 0.9rem; }
+            .circle {
+                width: 38px;
+                height: 38px;
+                font-size: 0.9rem;
+            }
         }
         
-        .circle:hover { transform: scale(1.05); background: #e2e8f0; }
+        .circle:hover {
+            transform: scale(1.05);
+            background: #e2e8f0;
+        }
         
         .circle.active {
             background: #3b82f6;
@@ -338,7 +365,10 @@
         }
 
         @media (min-width: 640px) {
-            .grid-2 { grid-template-columns: 1fr 1fr; gap: 1rem; }
+            .grid-2 {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
         }
 
         .alert {
@@ -351,7 +381,10 @@
             font-size: 0.75rem;
         }
 
-        .alert-error { background: #fee2e2; color: #b91c1c; }
+        .alert-error {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
 
         .dashboard-stats {
             display: grid;
@@ -361,7 +394,10 @@
         }
 
         @media (min-width: 768px) {
-            .dashboard-stats { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+            .dashboard-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
         }
         
         .stat-card {
@@ -393,6 +429,7 @@
             font-weight: bold;
             font-size: 0.9rem;
             margin-bottom: 0.3rem;
+            word-break: break-word;
         }
         
         .score-badge {
@@ -406,7 +443,10 @@
             margin-right: 0.3rem;
         }
         
-        canvas { max-height: 300px; width: 100% !important; }
+        canvas {
+            max-height: 300px;
+            width: 100% !important;
+        }
 
         .management-flex {
             display: flex;
@@ -415,7 +455,14 @@
         }
 
         @media (min-width: 768px) {
-            .management-flex { flex-direction: row; gap: 2rem; }
+            .management-flex {
+                flex-direction: row;
+                gap: 2rem;
+            }
+        }
+
+        textarea {
+            resize: vertical;
         }
 
         .user-info {
@@ -444,10 +491,11 @@
             letter-spacing: 1px;
         }
         .info-peserta-card .nama {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: bold;
             color: #0f172a;
             margin-bottom: 0.3rem;
+            word-break: break-word;
         }
         .info-peserta-card .channel {
             display: inline-block;
@@ -460,11 +508,12 @@
             margin-bottom: 0.5rem;
         }
         .info-peserta-card .judul {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #334155;
             margin-top: 0.3rem;
             padding-top: 0.3rem;
             border-top: 1px dashed #bae6fd;
+            word-break: break-word;
         }
         .info-peserta-card .judul-label {
             font-size: 0.65rem;
@@ -481,6 +530,8 @@
         <button id="loginBtn">LOGIN</button>
         <div id="loginError" class="login-error"></div>
         <div style="margin-top:1rem; font-size:0.7rem; color:#64748b; text-align:center;">
+            Admin: NKP / ERW<br>
+            Juri: HERU / SITI / BUDI
         </div>
     </div>
 </div>
@@ -534,7 +585,7 @@
             <div id="kriteriaListMgmt" class="card-list"></div>
         </div>
 
-        <!-- FORM INPUT PANEL (Juri & Admin bisa akses) -->
+        <!-- FORM INPUT PANEL (Hanya Juri yang bisa submit, Admin hanya lihat) -->
         <div id="formPanel" class="panel">
             <h2>📝 FORM PENILAIAN</h2>
             <div id="formAlert"></div>
@@ -544,7 +595,7 @@
             </div>
             <div id="infoPeserta" class="info-peserta-card" style="display:none;"></div>
             <div id="dynamicKriteriaNilai"></div>
-            <button class="btn-primary" id="submitPenilaianBtn" style="margin-top:1rem; width:100%;">✅ SUBMIT PENILAIAN</button>
+            <button class="btn-primary" id="submitPenilaianBtn" style="margin-top:1rem; width:100%; display:none;">✅ SUBMIT PENILAIAN</button>
             <div id="hasilPenilaian" style="margin-top: 1.5rem;"></div>
         </div>
 
@@ -621,6 +672,7 @@
     let kriteriaData = [];
     let penilaianData = [];
     let currentUser = null;
+    let nilaiKriteria = {};
 
     function loadData() {
         juriData = JSON.parse(localStorage.getItem('juriData')) || [];
@@ -708,10 +760,8 @@
         const container = document.getElementById('kriteriaListMgmt');
         if(!container) return;
         if(kriteriaData.length === 0) { container.innerHTML = '<div class="card-item">BELUM ADA KRITERIA</div>'; return; }
-        container.innerHTML = kriteriaData.map(k => `<div class="card-item" style="flex-direction:column; align-items:flex-start;"><div><strong>[${k.kode}] ${k.nama}</strong> (MAX:${k.bobot}) <button class="btn-warning" onclick="editKriteria(${k.id})">EDIT</button><button class="btn-danger" onclick="hapusKriteria(${k.id})">HAPUS</button></div><div style="font-size:0.65rem; color:#555; margin-top:0.3rem;">📝 ${(k.descKurang||'-').substring(0,60)}</div></div>`).join('');
+        container.innerHTML = kriteriaData.map(k => `<div class="card-item" style="flex-direction:column; align-items:flex-start;"><div><strong>[${k.kode}] ${k.nama}</strong> (MAX:${k.bobot}) <button class="btn-warning" onclick="editKriteria(${k.id})">EDIT</button><button class="btn-danger" onclick="hapusKriteria(${k.id})">HAPUS</button></div><div style="font-size:0.65rem; color:#555; margin-top:0.3rem;">📝 ${(k.descKurang||'-').substring(0,60)}${(k.descKurang||'').length>60?'...':''}</div></div>`).join('');
     }
-
-    let nilaiKriteria = {};
 
     window.setRating = function(kriteriaId, score) {
         nilaiKriteria[kriteriaId] = score;
@@ -776,6 +826,9 @@
         let juriId = null;
         if(currentUser.role === 'juri') {
             juriId = currentUser.juriId;
+        } else {
+            showAlert('ADMIN TIDAK DAPAT MELAKUKAN PENILAIAN!', 'error');
+            return;
         }
         
         if(juriId && sudahMenilai(juriId, parseInt(pesertaId))) {
@@ -864,7 +917,7 @@
         const scoreCardHtml = pesertaScores.map((ps, rank) => `
             <div class="peserta-score-card">
                 <div class="peserta-name">${rank+1}. ${ps.nama} (${ps.channel})</div>
-                <div style="font-size:0.7rem; color:#475569; margin-bottom:0.3rem;">📌 ${ps.judul.substring(0,60)}${ps.judul.length>60?'...':''}</div>
+                <div style="font-size:0.7rem; color:#475569; margin-bottom:0.3rem; word-break:break-word;">📌 ${ps.judul.substring(0,80)}${ps.judul.length>80?'...':''}</div>
                 <div><span class="score-badge">🏆 TOTAL SKOR: ${ps.totalSkor}</span> <span class="score-badge" style="background:#64748b">📊 ${ps.jumlahPenilaian} X PENILAIAN</span></div>
             </div>
         `).join('');
@@ -979,13 +1032,17 @@
         renderDashboard();
         renderDropdownPeserta();
         
-        if(currentUser.role === 'admin') {
-            document.getElementById('dashboardPanel').classList.add('active-panel');
-            document.getElementById('formPanel').classList.remove('active-panel');
-            document.getElementById('managementPanel').classList.remove('active-panel');
-        } else {
+        // Tampilkan/sembunyikan tombol submit berdasarkan role
+        const submitBtn = document.getElementById('submitPenilaianBtn');
+        if(currentUser.role === 'juri') {
+            submitBtn.style.display = 'block';
             document.getElementById('formPanel').classList.add('active-panel');
             document.getElementById('dashboardPanel').classList.remove('active-panel');
+            document.getElementById('managementPanel').classList.remove('active-panel');
+        } else {
+            submitBtn.style.display = 'none';
+            document.getElementById('dashboardPanel').classList.add('active-panel');
+            document.getElementById('formPanel').classList.remove('active-panel');
             document.getElementById('managementPanel').classList.remove('active-panel');
         }
     }
@@ -1040,6 +1097,7 @@
         document.getElementById('loginError').innerHTML = '';
     }
 
+    // EVENT LISTENERS
     document.getElementById('loginBtn')?.addEventListener('click', () => {
         const username = document.getElementById('loginUsername').value;
         if(login(username)) {
